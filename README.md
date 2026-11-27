@@ -48,7 +48,9 @@ Os cards usam artes padrão geradas pelo próprio jogo (sem fotos externas). Cad
 ```
 7a0-arena-do-multiverso/
 ├── index.html                  # O jogo completo (HTML + CSS + JS num único arquivo)
-├── firebase-config.example.js  # Modelo opcional para ativar as salas online
+├── firebase-config.js          # Configuração do Firebase (salas online)
+├── firebase-config.example.js  # Modelo para usar outro projeto Firebase
+├── firestore.rules             # Regras de segurança do banco
 ├── .nojekyll                   # Serve os arquivos como estão no GitHub Pages
 ├── CHANGELOG.md                # Histórico de versões
 ├── CONTRIBUTING.md             # Fluxo de branches e como publicar uma versão
@@ -64,10 +66,15 @@ Os cards usam artes padrão geradas pelo próprio jogo (sem fotos externas). Cad
 
 Detalhes em [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 🌐 Modo online (opcional)
+## 🌐 Modo online
 
-Os modos contra IA, local e desafio por código funcionam direto no site. As **salas online em tempo real** usam Firebase:
-copie `firebase-config.example.js` para `firebase-config.js`, preencha com as credenciais do seu projeto Firebase (Firestore + Auth anônima) e publique. Sem esse arquivo, o jogo continua funcionando normalmente no modo offline.
+As **salas online em tempo real** (Copa do Multiverso) já estão ativas no site, usando o Firebase do projeto `arena-multiverso-7a0`:
+
+- **Login anônimo** — ninguém precisa criar conta para jogar.
+- **Firestore (São Paulo)** — guarda só as salas do mata-mata.
+- **Regras de segurança** em [`firestore.rules`](firestore.rules): só é possível ler/gravar salas com código `SL-0000` e no formato do jogo; todo o resto é bloqueado e salas não podem ser apagadas por jogadores.
+
+A configuração fica em `firebase-config.js`. Os valores ali são públicos por natureza no Firebase Web — a segurança vem das regras. Para usar outro projeto Firebase, edite esse arquivo seguindo o modelo `firebase-config.example.js`.
 
 ## 💻 Rodar localmente
 
