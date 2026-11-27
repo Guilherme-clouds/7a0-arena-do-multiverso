@@ -1,8 +1,8 @@
 <div align="center">
 
-# ⚡ 7 a 0: Arena do Multiverso
+# ⚡ 7 a 0: Arena Multiverso
 
-**Monte seu esquadrão de 7 heróis e vilões do multiverso Marvel e vença duelos em 4 atos.**
+**Monte seu esquadrão de 7 heróis e vilões do multiverso e vença duelos em 4 atos.**
 
 [![Jogar agora](https://img.shields.io/badge/%E2%96%B6%20JOGAR%20AGORA-GitHub%20Pages-e11d48?style=for-the-badge)](https://guilherme-clouds.github.io/7a0-arena-do-multiverso/)
 ![HTML5](https://img.shields.io/badge/HTML5-single%20file-orange?style=flat-square)
@@ -38,6 +38,8 @@ Para chamar amigos, use o botão **🔗 Convidar Amigos** no topo do jogo — el
 **Regras de draft entre players:** um card já escolhido por outro player fica bloqueado para os demais, e um mesmo personagem não pode aparecer em duas versões no mesmo time (ex.: dois Homens de Ferro).
 
 ## 🗂️ Catálogo
+
+Os cards usam artes padrão geradas pelo próprio jogo (sem fotos externas). Cada jogador pode colocar imagens próprias em **⚙️ Dev / Imagens** — elas ficam salvas só no navegador dele.
 
 51 cards de 5 obras: *Vingadores: Guerra Infinita*, *Vingadores: Ultimato*, *Vingadores: Era de Ultron*, *X-Men* e *Vingadores: Doomsday*.
 
