@@ -2,6 +2,12 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.2.0] - 2026-11-27
+
+### Adicionado
+- Salas online em tempo real usando o Firebase `arena-multiverso-7a0` (login anônimo + Firestore em São Paulo).
+- `firestore.rules` com as regras de segurança publicadas (somente salas do mata-mata; resto bloqueado).
+
 ## [1.1.0] - 2026-11-27
 
 ### Alterado

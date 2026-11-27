@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Somente as salas do Mata-Mata do jogo 7 a 0: Arena Multiverso
+    match /artifacts/{appId}/public/data/rooms/{roomId} {
+      allow read: if request.auth != null && appId == '7a0-arena-multiverso';
+      allow create, update: if request.auth != null
+        && appId == '7a0-arena-multiverso'
+        && roomId.matches('^SL-[0-9]{4}$')
+        && request.resource.data.keys().hasOnly(['size', 'phase', 'participants', 'rounds', 'champion', 'updatedAt'])
+        && request.resource.data['size'] in [4, 8]
+        && request.resource.data['phase'] in ['LOBBY', 'SIMULTANEOUS_DRAFT', 'BRACKET']
+        && request.resource.data['participants'] is list
+        && request.resource.data['participants'].size() <= 8
+        && request.resource.data['rounds'] is list
+        && request.resource.data['rounds'].size() <= 4;
+      allow delete: if false;
+    }
+    // Todo o resto fica bloqueado
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
