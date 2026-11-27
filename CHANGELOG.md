@@ -2,6 +2,13 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.1.0] - 2026-11-27
+
+### Alterado
+- Novo nome: **7 a 0: Arena Multiverso** (sem "Marvel" no título e nos textos do jogo).
+- Cards usam somente as artes padrão geradas pelo jogo; todas as fotos externas foram removidas.
+- Imagens personalizadas (Dev / Imagens) ficam apenas no navegador de cada jogador e não são mais enviadas ao servidor.
+
 ## [1.0.0] - 2026-11-27
 
 ### Adicionado
