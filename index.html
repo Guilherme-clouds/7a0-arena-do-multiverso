@@ -1,0 +1,2985 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7 a 0: Arena do Multiverso Marvel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Orbitron', 'sans-serif'],
+            hero: ['Rajdhani', 'sans-serif'],
+          },
+          colors: {
+            void: '#090b12',
+            surface: '#111625',
+            surfaceLight: '#1a2238',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #090b12;
+      background-image:
+        radial-gradient(circle at 12% 10%, rgba(124, 58, 237, 0.16), transparent 34%),
+        radial-gradient(circle at 88% 14%, rgba(217, 119, 6, 0.12), transparent 32%),
+        radial-gradient(circle at 82% 85%, rgba(5, 150, 105, 0.13), transparent 36%),
+        radial-gradient(circle at 18% 85%, rgba(220, 38, 38, 0.10), transparent 34%),
+        linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 34px 34px, 34px 34px;
+      color: #f8fafc;
+      min-height: 100vh;
+    }
+
+    /* Collectible Card Holographic & Hover Polish */
+    .marvel-card {
+      position: relative;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .marvel-card:hover {
+      transform: translateY(-5px) scale(1.015);
+    }
+    .marvel-card::after {
+      content: "";
+      position: absolute;
+      inset: -60%;
+      background: linear-gradient(
+        115deg,
+        transparent 32%,
+        rgba(255, 255, 255, 0.08) 44%,
+        rgba(255, 255, 255, 0.22) 50%,
+        rgba(255, 255, 255, 0.06) 56%,
+        transparent 68%
+      );
+      transform: translateX(-100%) rotate(12deg);
+      transition: transform 0.65s ease;
+      pointer-events: none;
+      z-index: 20;
+    }
+    .marvel-card:hover::after {
+      transform: translateX(100%) rotate(12deg);
+    }
+
+    /* 5 Era Card Themes */
+    .era-infinity {
+      background: linear-gradient(165deg, #21103d 0%, #120c24 55%, #090b12 100%);
+      border-color: rgba(192, 132, 252, 0.6);
+      box-shadow: 0 12px 30px -10px rgba(124, 58, 237, 0.45);
+    }
+    .era-endgame {
+      background: linear-gradient(165deg, #2b1d0b 0%, #15182c 55%, #090b12 100%);
+      border-color: rgba(251, 191, 36, 0.62);
+      box-shadow: 0 12px 30px -10px rgba(217, 119, 6, 0.42);
+    }
+    .era-ultron {
+      background: linear-gradient(165deg, #311015 0%, #171822 55%, #090b12 100%);
+      border-color: rgba(248, 113, 113, 0.6);
+      box-shadow: 0 12px 30px -10px rgba(220, 38, 38, 0.42);
+    }
+    .era-xmen {
+      background: linear-gradient(165deg, #102552 0%, #1c1d1a 55%, #090b12 100%);
+      border-color: rgba(250, 204, 21, 0.6);
+      box-shadow: 0 12px 30px -10px rgba(37, 99, 235, 0.42);
+    }
+    .era-doomsday {
+      background: linear-gradient(165deg, #072d22 0%, #0d1d1f 55%, #090b12 100%);
+      border-color: rgba(52, 211, 153, 0.62);
+      box-shadow: 0 12px 30px -10px rgba(5, 150, 105, 0.42);
+    }
+
+    /* Full-Bleed Card Art & Translucent Glass Attribute Panel */
+    .card-fullbleed-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 15%;
+    }
+    .card-fullbleed-gradient {
+      background: linear-gradient(
+        180deg,
+        rgba(9, 13, 24, 0.05) 0%,
+        rgba(9, 13, 24, 0.30) 40%,
+        rgba(9, 13, 24, 0.80) 70%,
+        rgba(9, 13, 24, 0.94) 100%
+      );
+    }
+    .card-glass-panel {
+      background: rgba(13, 18, 34, 0.62);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    @keyframes pulseSlot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.55); }
+      50% { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
+    }
+    .slot-ready {
+      animation: pulseSlot 1.6s infinite;
+      border-color: #38bdf8 !important;
+      background-color: rgba(14, 165, 233, 0.16) !important;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-enter {
+      animation: fadeSlide 0.35s ease-out forwards;
+    }
+
+    @keyframes spinGlow {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.03); filter: brightness(1.25); }
+    }
+    .roulette-spinning {
+      animation: spinGlow 0.28s infinite;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #090b12; }
+    ::-webkit-scrollbar-thumb { background: #2c3754; border-radius: 9999px; }
+  </style>
+</head>
+<body class="antialiased selection:bg-purple-500 selection:text-white">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 border-b border-slate-800/90 bg-void/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 via-amber-500 to-emerald-500 flex items-center justify-center font-display font-black text-sm text-white shadow-lg">
+          7x0
+        </div>
+        <div>
+          <h1 class="font-display font-extrabold text-base sm:text-lg tracking-wider leading-none text-white">
+            7 A 0 <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-amber-300 to-emerald-400">ARENA DO MULTIVERSO</span>
+          </h1>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-[10px] text-slate-400 font-medium">51 Cards • 5 Obras</span>
+            <span id="photo-count-pill" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/40">
+              🖼️ Fotos: 51/51
+            </span>
+            <span id="cloud-status-pill" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-800 text-slate-400 border border-slate-700">
+              ● Conectando...
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="openShareLinkModal()" class="px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-600/85 to-sky-600/85 hover:from-emerald-500 hover:to-sky-500 border border-emerald-400/50 text-xs font-bold text-white transition flex items-center gap-1.5 shadow-lg">
+          <span>🔗</span> Convidar Amigos
+        </button>
+        <button onclick="openDevModal()" class="px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-xs font-bold text-amber-300 transition flex items-center gap-1.5">
+          <span>⚙️</span> Dev / Imagens
+        </button>
+        <button onclick="openCatalogModal()" class="px-3 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-slate-200 transition flex items-center gap-1.5">
+          <span>🃏</span> Catálogo (51)
+        </button>
+        <button onclick="openRulesModal()" class="px-3 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-slate-200 transition flex items-center gap-1.5">
+          <span>📘</span> Regras
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APPLICATION AREA -->
+  <main id="app" class="max-w-7xl mx-auto px-4 py-6 pb-20"></main>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+  <!-- MODAL: SHARE / INVITE FRIENDS LINK -->
+  <div id="share-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm p-4 flex items-center justify-center">
+    <div class="max-w-lg w-full bg-surface border border-emerald-500/40 rounded-3xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold uppercase">Multiplayer & Convite</span>
+          <h3 class="font-display text-lg font-bold text-white mt-1">Convidar Amigos para Jogar</h3>
+        </div>
+        <button onclick="closeShareLinkModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white">✕</button>
+      </div>
+
+      <p id="share-modal-desc" class="text-xs text-slate-300 leading-relaxed">
+        Copie o link abaixo e envie no chat para seus amigos abrirem o <strong class="text-white">7 a 0: Arena do Multiverso</strong> diretamente:
+      </p>
+
+      <div id="share-sandbox-warning" class="hidden rounded-2xl bg-amber-500/15 border border-amber-500/40 p-3.5 space-y-2">
+        <div class="text-xs font-bold text-amber-300">⚠️ Você está no Preview Privado (Erro 404 para amigos)</div>
+        <p class="text-[11px] text-slate-300 leading-relaxed">
+          O link interno deste editor é privado e só abre no seu navegador. Para enviar um link real aos seus amigos, baixe o arquivo <strong>.html</strong> abaixo e suba gratuitamente no <strong>Netlify Drop</strong>, <strong>Vercel</strong> ou <strong>GitHub Pages</strong>.
+        </p>
+        <div class="pt-1">
+          <label class="block text-[10px] font-bold text-amber-200 uppercase mb-1">Já publicou o site? Cole a URL base aqui:</label>
+          <input id="share-custom-base-input" type="url" placeholder="Ex: https://7a0-multiverso.netlify.app" oninput="updateCustomSiteBaseUrl(this.value)"
+            class="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-amber-500/40 text-xs text-white focus:outline-none" />
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-[11px] font-bold text-slate-400 uppercase">Link Direto do Jogo</label>
+        <div class="flex gap-2">
+          <input id="share-game-url-input" type="text" readonly
+            class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs font-mono text-emerald-300 focus:outline-none" />
+          <button onclick="copyTextFromInput('share-game-url-input')" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white shrink-0">
+            📋 Copiar Link
+          </button>
+        </div>
+      </div>
+
+      <div id="share-extra-box" class="hidden rounded-2xl bg-slate-950/90 border border-slate-800 p-3.5 space-y-2">
+        <div id="share-extra-label" class="text-[11px] font-bold text-sky-300"></div>
+        <div class="flex gap-2">
+          <input id="share-extra-value" type="text" readonly
+            class="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-white" />
+          <button onclick="copyTextFromInput('share-extra-value')" class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white shrink-0">
+            Copiar
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-slate-800">
+        <button onclick="downloadStandaloneHTMLWithPhotos()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-amber-300">
+          💾 Baixar Arquivo (.html)
+        </button>
+        <button onclick="closeShareLinkModal()" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white">
+          Concluir
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RULES -->
+  <div id="rules-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm p-4 overflow-y-auto flex items-center justify-center">
+    <div class="max-w-2xl w-full bg-surface border border-slate-700 rounded-3xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h2 class="font-display text-lg sm:text-xl font-bold text-white">Regras • 7 a 0: Arena do Multiverso</h2>
+        <button onclick="closeRulesModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-white">✕</button>
+      </div>
+      <div class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed max-h-[65vh] overflow-y-auto pr-1">
+        <p><strong class="text-white">1. Formação Tática (7 Vagas):</strong> Escolha entre <code>3-2-2</code>, <code>2-3-2</code> ou <code>2-2-3</code> para definir quantas vagas você terá de <span class="text-rose-300 font-bold">Ofensivo (OFE)</span>, <span class="text-sky-300 font-bold">Estratégico (EST)</span> e <span class="text-emerald-300 font-bold">Suporte (SUP)</span>.</p>
+        <p><strong class="text-white">2. Roleta do Multiverso (7 Rodadas):</strong> Em cada rodada, clique em <em>Sortear Filme / Série</em> para girar a roleta por 1,5s e revelar uma das 5 sagas junto com 3 personagens. Você possui <strong>2 rerolls</strong> por draft.</p>
+        <p><strong class="text-white">3. Encaixe de Posição:</strong> Escalar na posição primária rende <strong>100%</strong> dos atributos; na secundária rende <strong>90%</strong>; e fora de posição rende <strong>70%</strong>.</p>
+        <p><strong class="text-white">4. Pré-Duelo & Batalha em 4 Atos:</strong> Antes de duelar, veja a barra de probabilidade, o log de favoritismo e clique em <strong>Pronto</strong>. A batalha ocorre em 4 Atos: Estratégia (2 pts), Suporte (2 pts), Ofensivo (2 pts) e Overall Geral (3 pts). Em caso de empate, ocorre Morte Súbita.</p>
+      </div>
+      <div class="flex justify-end pt-2 border-t border-slate-800">
+        <button onclick="closeRulesModal()" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white">Entendi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CATALOG (51 CHARACTERS) -->
+  <div id="catalog-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm p-4 overflow-y-auto">
+    <div class="max-w-7xl mx-auto bg-surface border border-slate-700 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5 my-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+        <div>
+          <h2 class="font-display text-lg sm:text-2xl font-bold text-white">Catálogo Oficial • 51 Personagens</h2>
+          <p class="text-xs text-slate-400">Explore os atributos calibrados das 5 obras do Multiverso Marvel.</p>
+        </div>
+        <button onclick="closeCatalogModal()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white">✕ Fechar</button>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap gap-1.5">
+          <button data-era="ALL" onclick="renderCatalog('ALL')" class="cat-filter-btn px-3 py-1.5 rounded-xl bg-slate-800 text-xs font-bold text-white">Todos (51)</button>
+          <button data-era="INFINITY" onclick="renderCatalog('INFINITY')" class="cat-filter-btn px-3 py-1.5 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-bold">🧤 Guerra Infinita</button>
+          <button data-era="ENDGAME" onclick="renderCatalog('ENDGAME')" class="cat-filter-btn px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold">⏳ Ultimato</button>
+          <button data-era="ULTRON" onclick="renderCatalog('ULTRON')" class="cat-filter-btn px-3 py-1.5 rounded-xl bg-red-500/20 text-red-300 border border-red-500/40 text-xs font-bold">🤖 Era de Ultron</button>
+          <button data-era="XMEN" onclick="renderCatalog('XMEN')" class="cat-filter-btn px-3 py-1.5 rounded-xl bg-blue-500/20 text-yellow-300 border border-yellow-400/40 text-xs font-bold">❌ X-Men '97</button>
+          <button data-era="DOOMSDAY" onclick="renderCatalog('DOOMSDAY')" class="cat-filter-btn px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold">🎭 Doomsday</button>
+        </div>
+        <input id="catalog-search" type="text" placeholder="Buscar personagem..." oninput="renderCatalog(currentCatalogEra)"
+          class="px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-purple-400 w-full sm:w-64" />
+      </div>
+
+      <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[68vh] overflow-y-auto pr-1"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: DEV / IMAGES MANAGER -->
+  <div id="dev-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm p-4 overflow-y-auto">
+    <div class="max-w-5xl mx-auto bg-surface border border-amber-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-4 my-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+        <div>
+          <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-bold uppercase">Modo Desenvolvedor</span>
+          <h2 class="font-display text-lg sm:text-xl font-bold text-white mt-1">Gerenciador de Imagens dos Cards</h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="exportDevJSON()" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white">📤 Exportar JSON</button>
+          <button onclick="toggleImportJSONBox()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200">📥 Importar JSON</button>
+          <button onclick="downloadStandaloneHTMLWithPhotos()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">💾 Baixar HTML c/ Fotos</button>
+          <button id="btn-reset-all-dev" onclick="resetAllDevImages()" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-xs font-bold text-rose-300">♻️ Restaurar Todas</button>
+          <button onclick="closeDevModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white">✕</button>
+        </div>
+      </div>
+
+      <div id="dev-json-drawer" class="hidden rounded-2xl bg-slate-950 border border-slate-800 p-3 space-y-2">
+        <textarea id="dev-json-input" rows="4" placeholder='{"thanos_iw": "https://..."}'
+          class="w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-emerald-300"></textarea>
+        <div class="flex justify-end">
+          <button onclick="applyImportedDevJSON()" class="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">Aplicar JSON</button>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-2">
+        <select id="dev-era-filter" onchange="renderDevList()" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-bold text-white">
+          <option value="ALL">Todas as Obras (51)</option>
+          <option value="INFINITY">Guerra Infinita (2018)</option>
+          <option value="ENDGAME">Ultimato (2019)</option>
+          <option value="ULTRON">Era de Ultron (2015)</option>
+          <option value="XMEN">X-Men '97 / Clássicos</option>
+          <option value="DOOMSDAY">Doomsday (2026)</option>
+        </select>
+        <input id="dev-search" type="text" placeholder="Filtrar personagem por nome..." oninput="renderDevList()"
+          class="flex-1 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400" />
+      </div>
+
+      <div id="dev-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-1"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: TOURNAMENT SLOT CODE -->
+  <div id="slot-code-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm p-4 flex items-center justify-center">
+    <div class="max-w-lg w-full bg-surface border border-slate-700 rounded-3xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="font-display text-lg font-bold text-white">Adicionar Esquadrão ao Mata-Mata</h3>
+        <button onclick="closeSlotCodeModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white">✕</button>
+      </div>
+      <p class="text-xs text-slate-400">Cole abaixo o Código de Esquadrão (<code>MRV2-...</code>) enviado por um amigo para preencher a vaga vazia do torneio.</p>
+      <textarea id="tournament-code-input" rows="3" placeholder="Cole o código MRV2-... aqui"
+        class="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-xs font-mono text-white focus:outline-none focus:border-emerald-400"></textarea>
+      <div class="flex justify-end gap-2">
+        <button onclick="closeSlotCodeModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-xs font-bold text-slate-300">Cancelar</button>
+        <button onclick="confirmAddCodeToTournament()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">Adicionar ao Torneio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APPLICATION MODULE (FIREBASE + GAME ENGINE) -->
+  <!-- Configuração online opcional (Firebase). Copie firebase-config.example.js para firebase-config.js e preencha. -->
+  <script src="firebase-config.js" onerror="void 0"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // =========================================================================
+    // 1. CLOUD / FIREBASE INITIALIZATION
+    // =========================================================================
+    const appId = typeof __app_id !== 'undefined' ? __app_id : '7a0-multiverso-marvel';
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    let cloudOnline = false;
+    let roomUnsubscribe = null;
+
+    async function initCloud() {
+      const pill = document.getElementById('cloud-status-pill');
+      try {
+        if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+          throw new Error('Configuração online não detectada');
+        }
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const firebaseApp = initializeApp(firebaseConfig);
+        db = getFirestore(firebaseApp);
+        auth = getAuth(firebaseApp);
+
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        currentUser = auth.currentUser;
+        if (currentUser) {
+          cloudOnline = true;
+          pill.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/40';
+          pill.textContent = '● Online Sync Ativo';
+          await loadDevImagesFromCloud();
+        }
+      } catch (err) {
+        cloudOnline = false;
+        pill.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/40';
+        pill.textContent = '● Modo Local / Códigos';
+      }
+      handleUrlDeepLinks();
+      render();
+    }
+
+    // =========================================================================
+    // 2. COMPLETE DATABASE: 5 ERAS & 51 CALIBRATED CHARACTERS
+    // =========================================================================
+    const ERAS = {
+      INFINITY: {
+        id: 'INFINITY',
+        name: 'Vingadores: Guerra Infinita',
+        year: '2018',
+        short: 'Guerra Infinita (2018)',
+        cardClass: 'era-infinity',
+        badgeBg: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+        primaryHex: '#7c3aed',
+        accentHex: '#c084fc',
+        icon: '🧤'
+      },
+      ENDGAME: {
+        id: 'ENDGAME',
+        name: 'Vingadores: Ultimato',
+        year: '2019',
+        short: 'Ultimato (2019)',
+        cardClass: 'era-endgame',
+        badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+        primaryHex: '#d97706',
+        accentHex: '#fbbf24',
+        icon: '⏳'
+      },
+      ULTRON: {
+        id: 'ULTRON',
+        name: 'Vingadores: Era de Ultron',
+        year: '2015',
+        short: 'Era de Ultron (2015)',
+        cardClass: 'era-ultron',
+        badgeBg: 'bg-red-500/20 text-red-300 border-red-500/40',
+        primaryHex: '#dc2626',
+        accentHex: '#f87171',
+        icon: '🤖'
+      },
+      XMEN: {
+        id: 'XMEN',
+        name: "X-Men (Clássicos / '97)",
+        year: "1997/2000",
+        short: "X-Men (Clássicos / '97)",
+        cardClass: 'era-xmen',
+        badgeBg: 'bg-blue-500/20 text-yellow-300 border-yellow-400/40',
+        primaryHex: '#2563eb',
+        accentHex: '#facc15',
+        icon: '❌'
+      },
+      DOOMSDAY: {
+        id: 'DOOMSDAY',
+        name: 'Vingadores: Doomsday',
+        year: '2026',
+        short: 'Doomsday (2026)',
+        cardClass: 'era-doomsday',
+        badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+        primaryHex: '#059669',
+        accentHex: '#34d399',
+        icon: '🎭'
+      }
+    };
+
+    const ROLE_META = {
+      OFE: { key: 'OFE', label: 'Poder Ofensivo', short: 'OFE', color: 'text-rose-300', bg: 'bg-rose-500/20 border-rose-500/40', bar: 'bg-rose-500' },
+      EST: { key: 'EST', label: 'Poder Estratégico', short: 'EST', color: 'text-sky-300', bg: 'bg-sky-500/20 border-sky-500/40', bar: 'bg-sky-500' },
+      SUP: { key: 'SUP', label: 'Suporte & Controle', short: 'SUP', color: 'text-emerald-300', bg: 'bg-emerald-500/20 border-emerald-500/40', bar: 'bg-emerald-500' }
+    };
+
+    const FORMATIONS = {
+      '3-2-2': { id: '3-2-2', name: '3-2-2 • Agressiva', desc: 'Pressão máxima no ataque com 3 vagas ofensivas.', counts: { OFE: 3, EST: 2, SUP: 2 } },
+      '2-3-2': { id: '2-3-2', name: '2-3-2 • Mente Mestra', desc: 'Domínio tático e controle de campo com 3 estrategistas.', counts: { OFE: 2, EST: 3, SUP: 2 } },
+      '2-2-3': { id: '2-2-3', name: '2-2-3 • Fortaleza', desc: 'Sustentação impenetrável com 3 suportes de elite.', counts: { OFE: 2, EST: 2, SUP: 3 } }
+    };
+
+    const CHARACTERS = [
+      // --- 1. GUERRA INFINITA (2018) - 15 PERSONAGENS ---
+      { id: 'thanos_iw', baseHero: 'THANOS', baseName: 'Thanos', name: 'Thanos (Manopla)', era: 'INFINITY', ovr: 98, primary: 'OFE', secondary: 'EST', stats: { ofe: 99, est: 94, sup: 92 }, mono: 'TH', emblem: 'infinity', colors: ['#581c87', '#facc15'], wikiTitle: 'Thanos', imgUrl: 'https://i.pinimg.com/1200x/89/ba/7a/89ba7a7c3ddf679f1b71a9941d95b019.jpg', feat: 'Derrotou Hulk sem Joias, tankou os Vingadores em Titã e executou o Estalo.' },
+      { id: 'thor_iw', baseHero: 'THOR', baseName: 'Thor', name: 'Thor (Stormbreaker)', era: 'INFINITY', ovr: 94, primary: 'OFE', secondary: 'SUP', stats: { ofe: 98, est: 76, sup: 85 }, mono: 'TR', emblem: 'axe', colors: ['#1e3a8a', '#38bdf8'], wikiTitle: 'Thor (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/1200x/4d/c6/8c/4dc68ccf16e12d82373798c168ba1936.jpg', feat: 'Sobreviveu à estrela de Nidavellir e atravessou o raio das 6 Joias.' },
+      { id: 'strange_iw', baseHero: 'STRANGE', baseName: 'Doutor Estranho', name: 'Doutor Estranho', era: 'INFINITY', ovr: 91, primary: 'EST', secondary: 'SUP', stats: { ofe: 87, est: 95, sup: 91 }, mono: 'DS', emblem: 'mandala', colors: ['#7f1d1d', '#f59e0b'], wikiTitle: 'Doctor Strange', imgUrl: 'https://i.pinimg.com/1200x/2e/61/01/2e610115b2f3fe65534f8adadde61323.jpg', feat: 'Viu 14.000.605 futuros para traçar o único plano vencedor em Titã.' },
+      { id: 'wanda_iw', baseHero: 'WANDA', baseName: 'Wanda Maximoff', name: 'Wanda Maximoff', era: 'INFINITY', ovr: 90, primary: 'OFE', secondary: 'SUP', stats: { ofe: 95, est: 75, sup: 86 }, mono: 'WM', emblem: 'chaos', colors: ['#881337', '#f43f5e'], wikiTitle: 'Scarlet Witch', imgUrl: 'https://i.pinimg.com/736x/69/29/f0/6929f04e9dee8a1a81d1ea9e64815724.jpg', feat: 'Destruiu uma Joia do Infinito enquanto segurava Thanos com 5 Joias.' },
+      { id: 'ironman_iw', baseHero: 'IRONMAN', baseName: 'Homem de Ferro', name: 'Homem de Ferro (Mk 50)', era: 'INFINITY', ovr: 89, primary: 'EST', secondary: 'OFE', stats: { ofe: 88, est: 92, sup: 84 }, mono: 'IM', emblem: 'arc', colors: ['#991b1b', '#fbbf24'], wikiTitle: 'Iron Man', imgUrl: 'https://i.pinimg.com/1200x/6a/0f/81/6a0f811f418a3477be8b3fdce3a737e5.jpg', feat: 'Liderou a emboscada em Titã e tirou sangue de Thanos no mano a mano.' },
+      { id: 'ebony_iw', baseHero: 'EBONY_MAW', baseName: 'Fauce de Ébano', name: 'Fauce de Ébano', era: 'INFINITY', ovr: 84, primary: 'SUP', secondary: 'EST', stats: { ofe: 82, est: 84, sup: 89 }, mono: 'FE', emblem: 'psi', colors: ['#312e81', '#a78bfa'], wikiTitle: 'Ebony Maw', imgUrl: 'https://i.pinimg.com/736x/97/84/a6/9784a6160344291e5566d0c78cf8f6c5.jpg', feat: 'Neutralizou Doutor Estranho e Homem-Aranha com telecinese cirúrgica.' },
+      { id: 'panther_iw', baseHero: 'BLACK_PANTHER', baseName: 'Pantera Negra', name: "Pantera Negra (T'Challa)", era: 'INFINITY', ovr: 84, primary: 'EST', secondary: 'OFE', stats: { ofe: 84, est: 87, sup: 81 }, mono: 'BP', emblem: 'claw', colors: ['#1e1b4b', '#c084fc'], wikiTitle: 'Black Panther (character)', imgUrl: 'https://i.pinimg.com/736x/66/80/53/668053af100dcdf765f380d84cdfdc5a.jpg', feat: 'Comandou a defesa de Wakanda e liderou a carga frontal contra os Outriders.' },
+      { id: 'cull_iw', baseHero: 'CULL_OBSIDIAN', baseName: 'Cull Obsidian', name: 'Cull Obsidian', era: 'INFINITY', ovr: 83, primary: 'OFE', secondary: 'SUP', stats: { ofe: 88, est: 68, sup: 76 }, mono: 'CO', emblem: 'hammer', colors: ['#3f3f46', '#f97316'], wikiTitle: 'Cull Obsidian', imgUrl: 'https://i.pinimg.com/736x/89/08/4f/89084fa30a452862ec846f8a88bba7ba.jpg', feat: 'Tanque da Ordem Negra; pressionou a Hulkbuster e o Homem de Ferro Mk 50.' },
+      { id: 'cap_iw', baseHero: 'STEVE_ROGERS', baseName: 'Capitão América (Steve)', name: 'Capitão América (Nômade)', era: 'INFINITY', ovr: 82, primary: 'EST', secondary: 'SUP', stats: { ofe: 79, est: 88, sup: 82 }, mono: 'CA', emblem: 'shield', colors: ['#1e3a8a', '#cbd5e1'], wikiTitle: 'Captain America', imgUrl: 'https://i.pinimg.com/736x/9e/b6/6e/9eb66edd4f94e8c4effa47328dbc3be2.jpg', feat: 'Liderança tática em Wakanda e resistência frontal contra a Ordem Negra.' },
+      { id: 'corvus_iw', baseHero: 'CORVUS_GLAIVE', baseName: 'Corvus Glaive', name: 'Corvus Glaive', era: 'INFINITY', ovr: 82, primary: 'OFE', secondary: 'EST', stats: { ofe: 85, est: 81, sup: 75 }, mono: 'CG', emblem: 'glaive', colors: ['#14532d', '#a3e635'], wikiTitle: 'Corvus Glaive', imgUrl: 'https://i.pinimg.com/1200x/b8/0d/fe/b80dfeed55dde0c5588902ead65f37a8.jpg', feat: 'Infiltrou-se em Wakanda, feriu o Visão e duelou de igual para igual com o Capitão.' },
+      { id: 'spiderman_iw', baseHero: 'SPIDER_MAN', baseName: 'Homem-Aranha', name: 'Homem-Aranha (Aranha de Ferro)', era: 'INFINITY', ovr: 81, primary: 'SUP', secondary: 'OFE', stats: { ofe: 80, est: 76, sup: 85 }, mono: 'HA', emblem: 'web', colors: ['#991b1b', '#38bdf8'], wikiTitle: 'Spider-Man', imgUrl: 'https://i.pinimg.com/1200x/d1/e3/e3/d1e3e3f4c9611ebf9244108a27115b02.jpg', feat: 'Resgates em alta velocidade em Titã e suporte ágil com os braços mecânicos.' },
+      { id: 'proxima_iw', baseHero: 'PROXIMA_MIDNIGHT', baseName: 'Próxima Meia-Noite', name: 'Próxima Meia-Noite', era: 'INFINITY', ovr: 80, primary: 'OFE', secondary: 'EST', stats: { ofe: 83, est: 79, sup: 74 }, mono: 'PM', emblem: 'spear', colors: ['#1e293b', '#38bdf8'], wikiTitle: 'Proxima Midnight', imgUrl: 'https://i.pinimg.com/1200x/8c/7e/95/8c7e95fc9d373a09a48428394b8f304f.jpg', feat: 'Combatente de elite da Ordem Negra; segurou Wanda, Viúva Negra e Okoye juntas.' },
+      { id: 'shuri_iw', baseHero: 'SHURI', baseName: 'Shuri', name: 'Shuri', era: 'INFINITY', ovr: 80, primary: 'SUP', secondary: 'EST', stats: { ofe: 70, est: 85, sup: 88 }, mono: 'SH', emblem: 'tech', colors: ['#4c1d95', '#22d3ee'], wikiTitle: 'Shuri (character)', imgUrl: 'https://i.pinimg.com/1200x/67/db/a3/67dba346939f4f26bd43a7a416d4b4ed.jpg', feat: 'Mente mais brilhante de Wakanda; quase extraiu a Joia da Mente sob cerco.' },
+      { id: 'warmachine_iw', baseHero: 'WAR_MACHINE', baseName: 'Máquina de Combate', name: 'Máquina de Combate (Mk 4)', era: 'INFINITY', ovr: 80, primary: 'OFE', secondary: 'SUP', stats: { ofe: 83, est: 76, sup: 80 }, mono: 'MC', emblem: 'target', colors: ['#334155', '#f87171'], wikiTitle: 'War Machine', imgUrl: 'https://i.pinimg.com/736x/ae/fd/19/aefd1956bbe75f17d23ea49ea09953ae.jpg', feat: 'Bombardeio aéreo decisivo segurando hordas inteiras na barreira de Wakanda.' },
+      { id: 'widow_iw', baseHero: 'NATASHA', baseName: 'Viúva Negra', name: 'Viúva Negra (Natasha)', era: 'INFINITY', ovr: 78, primary: 'SUP', secondary: 'EST', stats: { ofe: 75, est: 81, sup: 83 }, mono: 'VN', emblem: 'hourglass', colors: ['#18181b', '#ef4444'], wikiTitle: 'Black Widow (Natasha Romanoff)', imgUrl: 'https://i.pinimg.com/1200x/ca/64/c0/ca64c000eb22577918763ed77f1b9187.jpg', feat: 'Combate corpo a corpo impecável contra a Ordem Negra e apoio tático em campo.' },
+
+      // --- 2. ULTIMATO (2019) - 10 PERSONAGENS ---
+      { id: 'marvel_eg', baseHero: 'CAPTAIN_MARVEL', baseName: 'Capitã Marvel', name: 'Capitã Marvel (Binária)', era: 'ENDGAME', ovr: 95, primary: 'OFE', secondary: 'SUP', stats: { ofe: 97, est: 76, sup: 88 }, mono: 'CM', emblem: 'star', colors: ['#1d4ed8', '#facc15'], wikiTitle: 'Captain Marvel (Carol Danvers)', imgUrl: 'https://i.pinimg.com/1200x/c6/00/e7/c600e7dc27c1a77df3753151a61dd3af.jpg', feat: 'Destruiu a nave Santuário II sozinha e segurou o soco direto de Thanos.' },
+      { id: 'wanda_eg', baseHero: 'WANDA', baseName: 'Wanda Maximoff', name: 'Feiticeira Escarlate (Fúria)', era: 'ENDGAME', ovr: 94, primary: 'OFE', secondary: 'SUP', stats: { ofe: 98, est: 74, sup: 85 }, mono: 'FE', emblem: 'chaos', colors: ['#7f1d1d', '#fb7185'], wikiTitle: 'Wanda Maximoff (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/736x/f1/b4/7b/f1b47b38d5450edb684f2a6c3176611f.jpg', feat: 'Quase derrotou Thanos sozinha, obrigando-o a bombardear o próprio exército.' },
+      { id: 'thanos_eg', baseHero: 'THANOS', baseName: 'Thanos', name: 'Thanos (Sem Joias)', era: 'ENDGAME', ovr: 92, primary: 'OFE', secondary: 'EST', stats: { ofe: 94, est: 91, sup: 82 }, mono: 'TH', emblem: 'blade', colors: ['#3b0764', '#f59e0b'], wikiTitle: 'Thanos (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/1200x/5d/1c/88/5d1c882d926fd40e440d2d8c02a81271.jpg', feat: 'Venceu Homem de Ferro Mk 85, Thor e Capitão (Mjolnir) no 3v1 usando tática e força.' },
+      { id: 'ironman_eg', baseHero: 'IRONMAN', baseName: 'Homem de Ferro', name: 'Homem de Ferro (Mark 85)', era: 'ENDGAME', ovr: 91, primary: 'EST', secondary: 'OFE', stats: { ofe: 89, est: 95, sup: 88 }, mono: 'IM', emblem: 'arc', colors: ['#991b1b', '#facc15'], wikiTitle: 'Tony Stark (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/1200x/d0/cf/bc/d0cfbcbfc44ae6152fa9069eee816108.jpg', feat: 'Construiu a Manopla Nano, liderou o assalto no tempo e executou o Estalo final.' },
+      { id: 'cap_eg', baseHero: 'STEVE_ROGERS', baseName: 'Capitão América (Steve)', name: 'Capitão América (Mjolnir)', era: 'ENDGAME', ovr: 89, primary: 'EST', secondary: 'OFE', stats: { ofe: 88, est: 93, sup: 86 }, mono: 'CA', emblem: 'hammer', colors: ['#1e3a8a', '#60a5fa'], wikiTitle: 'Steve Rogers (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/736x/b5/d2/b5/b5d2b5bc73f5de57b3a314a71fcfd34e.jpg', feat: 'Digno do Mjolnir, combinou escudo + raios contra Thanos e comandou os Vingadores.' },
+      { id: 'rescue_eg', baseHero: 'RESCUE', baseName: 'Resgate / Pepper Potts', name: 'Resgate / Mulher de Ferro', era: 'ENDGAME', ovr: 84, primary: 'SUP', secondary: 'OFE', stats: { ofe: 83, est: 79, sup: 87 }, mono: 'PP', emblem: 'arc', colors: ['#1e40af', '#fbbf24'], wikiTitle: 'Pepper Potts', imgUrl: 'https://i.pinimg.com/736x/27/6e/4c/276e4c042e66710aeda8b987d347ee62.jpg', feat: 'Armadura Mark 49 de alta tecnologia; deu cobertura aérea e lutou ao lado de Tony.' },
+      { id: 'valkyrie_eg', baseHero: 'VALKYRIE', baseName: 'Valquíria', name: 'Valquíria (Pégaso)', era: 'ENDGAME', ovr: 83, primary: 'OFE', secondary: 'SUP', stats: { ofe: 86, est: 80, sup: 82 }, mono: 'VQ', emblem: 'sword', colors: ['#1e293b', '#e2e8f0'], wikiTitle: 'Valkyrie (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/736x/50/34/2f/50342f4534c319cf16b8713564fb3242.jpg', feat: 'Liderou a cavalaria aérea de Nova Asgard e derrubou Leviatãs Chitauri.' },
+      { id: 'antman_eg', baseHero: 'ANT_MAN', baseName: 'Homem-Formiga', name: 'Homem-Formiga (Gigante)', era: 'ENDGAME', ovr: 82, primary: 'SUP', secondary: 'OFE', stats: { ofe: 83, est: 77, sup: 86 }, mono: 'HF', emblem: 'quantum', colors: ['#991b1b', '#94a3b8'], wikiTitle: 'Ant-Man (Scott Lang)', imgUrl: 'https://i.pinimg.com/1200x/68/4b/19/684b1963b245d3d71495f3bbb071a4ce.jpg', feat: 'Salvou os heróis dos escombros, esmagou Leviatãs e viabilizou a viagem quântica.' },
+      { id: 'warmachine_eg', baseHero: 'WAR_MACHINE', baseName: 'Máquina de Combate', name: 'Máquina de Combate (Patriot)', era: 'ENDGAME', ovr: 82, primary: 'OFE', secondary: 'SUP', stats: { ofe: 85, est: 78, sup: 81 }, mono: 'IP', emblem: 'target', colors: ['#1e3a8a', '#ef4444'], wikiTitle: 'James Rhodes (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/736x/b8/10/44/b81044556380e4cc6379c7132280ddb3.jpg', feat: 'Artilharia pesada de saturação na batalha final pelo universo.' },
+      { id: 'rocketgroot_eg', baseHero: 'ROCKET_GROOT', baseName: 'Rocket & Groot', name: 'Rocket & Groot (Dupla)', era: 'ENDGAME', ovr: 80, primary: 'EST', secondary: 'SUP', stats: { ofe: 77, est: 84, sup: 83 }, mono: 'RG', emblem: 'tech', colors: ['#78350f', '#4ade80'], wikiTitle: 'Rocket Raccoon', imgUrl: 'https://i.pinimg.com/1200x/6d/98/fa/6d98fa3b668ddc9c4c468f6c2613e300.jpg', feat: 'Rocket engenheiro tático do túnel quântico + Groot segurando a linha de frente.' },
+
+      // --- 3. ERA DE ULTRON (2015) - 10 PERSONAGENS ---
+      { id: 'vision_aou', baseHero: 'VISION', baseName: 'Visão', name: 'Visão (Joia da Mente)', era: 'ULTRON', ovr: 91, primary: 'EST', secondary: 'SUP', stats: { ofe: 89, est: 93, sup: 92 }, mono: 'VS', emblem: 'mind', colors: ['#881337', '#facc15'], wikiTitle: 'Vision (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/736x/79/b2/c1/79b2c181e8690c8faa1db00751502906.jpg', feat: 'Digno do Mjolnir, queimou Ultron da internet e salvou Wanda no núcleo de Sokovia.' },
+      { id: 'ultron_aou', baseHero: 'ULTRON', baseName: 'Ultron', name: 'Ultron (Vibranium Supremo)', era: 'ULTRON', ovr: 89, primary: 'EST', secondary: 'OFE', stats: { ofe: 88, est: 94, sup: 82 }, mono: 'UL', emblem: 'bot', colors: ['#27272a', '#ef4444'], wikiTitle: 'Ultron', imgUrl: 'https://i.pinimg.com/1200x/db/a1/eb/dba1eba990ffd6eab825ea3270739fb5.jpg', feat: 'Controlou centenas de drones e quase extinguiu a humanidade elevando Sokovia.' },
+      { id: 'hulk_aou', baseHero: 'HULK', baseName: 'Hulk', name: 'Hulk (Fúria de Joanesburgo)', era: 'ULTRON', ovr: 89, primary: 'OFE', secondary: 'SUP', stats: { ofe: 94, est: 65, sup: 81 }, mono: 'HK', emblem: 'fist', colors: ['#14532d', '#4ade80'], wikiTitle: 'Hulk', imgUrl: 'https://i.pinimg.com/1200x/70/d4/56/70d456a353c3c9cebfdbb41f875422c0.jpg', feat: 'Força física imparável; precisou da Hulkbuster inteira para ser contido.' },
+      { id: 'thor_aou', baseHero: 'THOR', baseName: 'Thor', name: 'Thor (Era de Ultron)', era: 'ULTRON', ovr: 88, primary: 'OFE', secondary: 'SUP', stats: { ofe: 91, est: 77, sup: 84 }, mono: 'TR', emblem: 'bolt', colors: ['#1e3a8a', '#60a5fa'], wikiTitle: 'Thor (Marvel Comics)', imgUrl: 'https://i.pinimg.com/1200x/1f/37/07/1f37079da73c89d7d8c1493bd1cb44b9.jpg', feat: 'Sobrecarregou o núcleo de vibranium com raios para vaporizar Sokovia no ar.' },
+      { id: 'hulkbuster_aou', baseHero: 'IRONMAN', baseName: 'Homem de Ferro', name: 'Hulkbuster (Mark 44)', era: 'ULTRON', ovr: 87, primary: 'OFE', secondary: 'EST', stats: { ofe: 90, est: 86, sup: 79 }, mono: 'HB', emblem: 'arc', colors: ['#991b1b', '#f59e0b'], wikiTitle: 'Hulkbuster', imgUrl: 'https://i.pinimg.com/1200x/72/bf/5d/72bf5d5e1d56ba8eaa1e4f3c22bbe64f.jpg', feat: 'Armadura modular com peças de reposição em órbita criada para parar o Hulk.' },
+      { id: 'wanda_aou', baseHero: 'WANDA', baseName: 'Wanda Maximoff', name: 'Wanda Maximoff (Novata)', era: 'ULTRON', ovr: 84, primary: 'OFE', secondary: 'SUP', stats: { ofe: 88, est: 73, sup: 82 }, mono: 'WM', emblem: 'chaos', colors: ['#7f1d1d', '#f43f5e'], wikiTitle: 'Scarlet Witch', imgUrl: 'https://i.pinimg.com/1200x/74/6a/6a/746a6abcdb09acfae928092219222a15.jpg', feat: 'Manipulou mentalmente todos os Vingadores e arrancou o núcleo de Ultron.' },
+      { id: 'cap_aou', baseHero: 'STEVE_ROGERS', baseName: 'Capitão América (Steve)', name: 'Capitão América (Ultron)', era: 'ULTRON', ovr: 82, primary: 'EST', secondary: 'SUP', stats: { ofe: 78, est: 88, sup: 82 }, mono: 'CA', emblem: 'shield', colors: ['#1e3a8a', '#ef4444'], wikiTitle: 'Captain America', imgUrl: 'https://i.pinimg.com/1200x/00/d1/e5/00d1e5e099b567f2ab4bbee5ac1fade7.jpg', feat: 'Liderança de campo e coordenação do resgate civil na cidade flutuante.' },
+      { id: 'quicksilver_aou', baseHero: 'QUICKSILVER', baseName: 'Mercúrio', name: 'Mercúrio (Pietro)', era: 'ULTRON', ovr: 80, primary: 'SUP', secondary: 'OFE', stats: { ofe: 79, est: 74, sup: 85 }, mono: 'PM', emblem: 'bolt', colors: ['#0c4a6e', '#38bdf8'], wikiTitle: 'Quicksilver (Marvel Comics)', imgUrl: 'https://i.pinimg.com/736x/72/3f/05/723f053e6445391f1be3fb2eb6df7f9f.jpg', feat: 'Evacuação em supervelocidade de Sokovia e ataques relâmpago nos drones.' },
+      { id: 'hawkeye_aou', baseHero: 'HAWKEYE', baseName: 'Gavião Arqueiro', name: 'Gavião Arqueiro (Clint)', era: 'ULTRON', ovr: 79, primary: 'EST', secondary: 'SUP', stats: { ofe: 76, est: 83, sup: 82 }, mono: 'GA', emblem: 'arrow', colors: ['#31102f', '#c084fc'], wikiTitle: 'Hawkeye (Clint Barton)', imgUrl: 'https://i.pinimg.com/736x/57/39/29/5739290ac5974fcdd85f41771cef0f1a.jpg', feat: 'Manteve o moral da equipe, resistiu ao controle mental e orientou Wanda.' },
+      { id: 'widow_aou', baseHero: 'NATASHA', baseName: 'Viúva Negra', name: 'Viúva Negra (Ultron)', era: 'ULTRON', ovr: 78, primary: 'SUP', secondary: 'EST', stats: { ofe: 75, est: 80, sup: 83 }, mono: 'VN', emblem: 'hourglass', colors: ['#18181b', '#f87171'], wikiTitle: 'Natasha Romanoff (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/736x/49/3c/82/493c82e2291ba0145a92a8bc9b3f9afd.jpg', feat: 'Acalmou o Hulk com a canção de ninar, rastreou o cetro e pilotou o Quinjet.' },
+
+      // --- 4. X-MEN (CLÁSSICOS / '97) - 8 PERSONAGENS ---
+      { id: 'phoenix_xm', baseHero: 'JEAN_GREY', baseName: 'Fênix Negra', name: 'Fênix Negra (Jean Grey)', era: 'XMEN', ovr: 97, primary: 'OFE', secondary: 'SUP', stats: { ofe: 99, est: 74, sup: 90 }, mono: 'FN', emblem: 'phoenix', colors: ['#9a3412', '#facc15'], wikiTitle: 'Jean Grey', imgUrl: 'https://i.pinimg.com/736x/26/52/2a/26522aeb158adc633efaba41263becd7.jpg', feat: 'Poder cósmico destrutivo quase incontrolável, baixa disciplina tática.' },
+      { id: 'magneto_xm', baseHero: 'MAGNETO', baseName: 'Magneto', name: 'Magneto', era: 'XMEN', ovr: 92, primary: 'OFE', secondary: 'EST', stats: { ofe: 94, est: 90, sup: 85 }, mono: 'MG', emblem: 'magnet', colors: ['#7f1d1d', '#c084fc'], wikiTitle: 'Magneto (Marvel Comics)', imgUrl: 'https://i.pinimg.com/1200x/d2/e9/d7/d2e9d7429c6b12b2bf51c43a3eaf07b0.jpg', feat: 'Manipulação eletromagnética massiva e mente estrategista de líder.' },
+      { id: 'xavier_xm', baseHero: 'PROFESSOR_X', baseName: 'Professor Xavier', name: 'Professor Xavier', era: 'XMEN', ovr: 91, primary: 'EST', secondary: 'SUP', stats: { ofe: 65, est: 97, sup: 94 }, mono: 'PX', emblem: 'psi', colors: ['#1e3a8a', '#facc15'], wikiTitle: 'Professor X', imgUrl: 'https://i.pinimg.com/736x/4a/e7/82/4ae7820ce84fdbe1caa9474771c6417a.jpg', feat: 'Maior mente telepática e tática; vulnerável fisicamente no ataque direto.' },
+      { id: 'storm_xm', baseHero: 'STORM', baseName: 'Tempestade', name: 'Tempestade', era: 'XMEN', ovr: 87, primary: 'SUP', secondary: 'OFE', stats: { ofe: 88, est: 80, sup: 90 }, mono: 'TP', emblem: 'bolt', colors: ['#1e293b', '#e2e8f0'], wikiTitle: 'Storm (Marvel Comics)', imgUrl: 'https://i.pinimg.com/736x/09/08/d9/0908d9726d1b18d3aac299818d085450.jpg', feat: 'Controle climático de área, cobertura aérea e dano elemental.' },
+      { id: 'wolverine_xm', baseHero: 'WOLVERINE', baseName: 'Wolverine', name: 'Wolverine', era: 'XMEN', ovr: 85, primary: 'OFE', secondary: 'SUP', stats: { ofe: 89, est: 74, sup: 80 }, mono: 'WV', emblem: 'claw', colors: ['#1e3a8a', '#facc15'], wikiTitle: 'Wolverine (character)', imgUrl: 'https://i.pinimg.com/736x/ee/28/d1/ee28d1022eda6f67d798e38c0eec23f8.jpg', feat: 'Linha de frente imortal com adamantium; pouco perfil de comandante.' },
+      { id: 'cyclops_xm', baseHero: 'CYCLOPS', baseName: 'Ciclope', name: 'Ciclope', era: 'XMEN', ovr: 84, primary: 'EST', secondary: 'OFE', stats: { ofe: 84, est: 89, sup: 78 }, mono: 'CC', emblem: 'visor', colors: ['#1d4ed8', '#ef4444'], wikiTitle: 'Cyclops (Marvel Comics)', imgUrl: 'https://i.pinimg.com/736x/47/8b/e8/478be8fdd2be7a3de5940a4a9614bfd7.jpg', feat: 'Líder de campo nato dos X-Men e rajadas ópticas de precisão.' },
+      { id: 'mystique_xm', baseHero: 'MYSTIQUE', baseName: 'Mística', name: 'Mística', era: 'XMEN', ovr: 80, primary: 'EST', secondary: 'SUP', stats: { ofe: 75, est: 85, sup: 82 }, mono: 'MS', emblem: 'mask', colors: ['#1e40af', '#facc15'], wikiTitle: 'Mystique (character)', imgUrl: 'https://i.pinimg.com/736x/64/4c/c4/644cc4278bc54f66efada7214e7d5606.jpg', feat: 'Infiltração, espionagem e sabotagem de operações inimigas.' },
+      { id: 'nightcrawler_xm', baseHero: 'NIGHTCRAWLER', baseName: 'Noturno', name: 'Noturno', era: 'XMEN', ovr: 79, primary: 'SUP', secondary: 'EST', stats: { ofe: 74, est: 77, sup: 85 }, mono: 'NT', emblem: 'bamf', colors: ['#312e81', '#f43f5e'], wikiTitle: 'Nightcrawler (character)', imgUrl: 'https://i.pinimg.com/736x/b6/60/07/b66007c1b0d5ee6472c0f73a1de4a5e8.jpg', feat: 'Teletransporte tático para resgate e reposicionamento instantâneo.' },
+
+      // --- 5. DOOMSDAY (2026) - 8 PERSONAGENS ---
+      { id: 'doom_dd', baseHero: 'DOCTOR_DOOM', baseName: 'Doutor Destino', name: 'Doutor Destino (Von Doom)', era: 'DOOMSDAY', ovr: 95, primary: 'OFE', secondary: 'EST', stats: { ofe: 97, est: 95, sup: 86 }, mono: 'DD', emblem: 'doom', colors: ['#064e3b', '#34d399'], wikiTitle: 'Doctor Doom', imgUrl: 'https://i.pinimg.com/236x/38/25/37/382537723189e2c43f8d97f11b4d1bfc.jpg', feat: 'Ameaça multiversal central; combina feitiçaria sombria e intelecto supremo.' },
+      { id: 'loki_dd', baseHero: 'LOKI', baseName: 'Loki', name: 'Loki (Guardião Multiversal)', era: 'DOOMSDAY', ovr: 94, primary: 'SUP', secondary: 'EST', stats: { ofe: 84, est: 93, sup: 97 }, mono: 'LK', emblem: 'horns', colors: ['#065f46', '#facc15'], wikiTitle: 'Loki (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/736x/ed/0b/11/ed0b119f23d735a7793d2004b8fd4caf.jpg', feat: 'Sustenta as linhas do tempo e manipula o tabuleiro multiversal.' },
+      { id: 'sentry_dd', baseHero: 'SENTRY', baseName: 'Sentinela', name: 'Sentinela (Bob Reynolds)', era: 'DOOMSDAY', ovr: 93, primary: 'OFE', secondary: 'SUP', stats: { ofe: 98, est: 70, sup: 84 }, mono: 'ST', emblem: 'sun', colors: ['#78350f', '#fde047'], wikiTitle: 'Sentry (Robert Reynolds)', imgUrl: 'https://i.pinimg.com/736x/77/8d/58/778d589c531546b5023825f1fc8b6cac.jpg', feat: 'Poder bruto de um milhão de sóis explodindo, mas instável estrategicamente.' },
+      { id: 'reed_dd', baseHero: 'MISTER_FANTASTIC', baseName: 'Sr. Fantástico', name: 'Sr. Fantástico (Reed)', era: 'DOOMSDAY', ovr: 90, primary: 'EST', secondary: 'SUP', stats: { ofe: 78, est: 96, sup: 91 }, mono: 'RF', emblem: 'four', colors: ['#1e3a8a', '#38bdf8'], wikiTitle: 'Mister Fantastic', imgUrl: 'https://i.pinimg.com/736x/e4/20/f5/e420f5917682cc2eb1ad3aa21bc4b79a.jpg', feat: 'Maior intelecto científico da Terra-828 e rival direto de Destino.' },
+      { id: 'sue_dd', baseHero: 'INVISIBLE_WOMAN', baseName: 'Mulher Invisível', name: 'Mulher Invisível (Sue)', era: 'DOOMSDAY', ovr: 89, primary: 'SUP', secondary: 'OFE', stats: { ofe: 86, est: 84, sup: 94 }, mono: 'MI', emblem: 'four', colors: ['#0284c7', '#bae6fd'], wikiTitle: 'Invisible Woman', imgUrl: 'https://i.pinimg.com/736x/fe/d9/61/fed9617b8d36bbbfd6c42a397152205f.jpg', feat: 'Campos de força capazes de conter ameaças cósmicas e proteger toda a equipe.' },
+      { id: 'shangchi_dd', baseHero: 'SHANG_CHI', baseName: 'Shang-Chi', name: 'Shang-Chi (Dez Anéis)', era: 'DOOMSDAY', ovr: 86, primary: 'OFE', secondary: 'SUP', stats: { ofe: 89, est: 80, sup: 83 }, mono: 'SC', emblem: 'rings', colors: ['#991b1b', '#fbbf24'], wikiTitle: 'Shang-Chi', imgUrl: 'https://i.pinimg.com/736x/15/4d/7e/154d7e5288b23d38d01988f609f13ac0.jpg', feat: 'Mestre em artes marciais amplificado pela energia mística dos Dez Anéis.' },
+      { id: 'sam_dd', baseHero: 'SAM_WILSON', baseName: 'Capitão América (Sam)', name: 'Capitão América (Sam)', era: 'DOOMSDAY', ovr: 83, primary: 'EST', secondary: 'SUP', stats: { ofe: 79, est: 87, sup: 84 }, mono: 'SW', emblem: 'wings', colors: ['#1e3a8a', '#ef4444'], wikiTitle: 'Sam Wilson (Marvel Cinematic Universe)', imgUrl: 'https://i.pinimg.com/1200x/35/a7/d5/35a7d549194e3fc457a567f7e9585b84.jpg', feat: 'Líder da nova formação dos Vingadores e articulador em campo.' },
+      { id: 'yelena_dd', baseHero: 'YELENA', baseName: 'Yelena Belova', name: 'Yelena Belova', era: 'DOOMSDAY', ovr: 80, primary: 'SUP', secondary: 'EST', stats: { ofe: 78, est: 81, sup: 83 }, mono: 'YB', emblem: 'hourglass', colors: ['#1f2937', '#34d399'], wikiTitle: 'Yelena Belova', imgUrl: 'https://i.pinimg.com/736x/e7/3b/bc/e73bbc31b0ffc1cd090927f68e9b66ab.jpg', feat: 'Operações furtivas, reconhecimento e apoio tático dos Novos Vingadores.' }
+    ];
+
+    const CHAR_MAP = Object.fromEntries(CHARACTERS.map(c => [c.id, c]));
+
+    // =========================================================================
+    // 3. STATE & IMAGE STORAGE
+    // =========================================================================
+    const localSessionId = 'USR-' + Math.random().toString(36).slice(2, 9).toUpperCase();
+
+    const state = {
+      screen: 'HOME',
+      mode: 'SOLO', // SOLO | PASS_PLAY | CODE_CHALLENGE | TOURNAMENT_DRAFT
+      difficulty: 'CLASSIC',
+      exclusivePlayerCards: true, // Blocks exact card already picked by another human player
+      player1Name: 'Jogador 1',
+      player2Name: 'Jogador 2',
+      activeDraftPlayer: 1,
+      squads: { 1: null, 2: null },
+      draft: {
+        round: 1,
+        rerolls: 2,
+        currentEra: 'INFINITY',
+        options: [],
+        selectedCharId: null,
+        spinning: false,
+        awaitingSpin: true
+      },
+      preBattle: null,
+      battle: null,
+      tournament: {
+        size: 8,
+        roomCode: null,
+        isOnlineHost: false,
+        phase: 'LOBBY', // LOBBY | SIMULTANEOUS_DRAFT | BRACKET
+        participants: [],
+        rounds: [],
+        champion: null,
+        mySlotIndex: null,
+        targetSlotIndex: null
+      }
+    };
+
+    let customImages = {};
+    let autoFetchedImages = {};
+    let currentCatalogEra = 'ALL';
+    let devResetArmed = false;
+    let devSwapSourceId = null;
+    let rouletteTimerId = null;
+    let customPublicSiteBase = '';
+
+    try {
+      const savedCustom = localStorage.getItem('mrv_7a0_custom_imgs_v1');
+      if (savedCustom) customImages = JSON.parse(savedCustom);
+    } catch (e) {
+      customImages = {};
+    }
+
+    try {
+      const cachedAuto = localStorage.getItem('mrv_7a0_auto_imgs_v1');
+      if (cachedAuto) autoFetchedImages = JSON.parse(cachedAuto);
+    } catch (e) {
+      autoFetchedImages = {};
+    }
+
+    function getEffectiveCharImage(char) {
+      if (!char) return '';
+      return customImages[char.id] || autoFetchedImages[char.id] || char.imgUrl || '';
+    }
+
+    function updatePhotoCountPill() {
+      const pill = document.getElementById('photo-count-pill');
+      if (!pill) return;
+      const count = CHARACTERS.filter(c => !!getEffectiveCharImage(c)).length;
+      pill.textContent = `🖼️ Fotos: ${count}/${CHARACTERS.length}`;
+    }
+
+    async function loadDevImagesFromCloud() {
+      if (!cloudOnline || !db) return;
+      try {
+        const ref = doc(db, 'artifacts', appId, 'public', 'data', 'config', 'devImages');
+        const snap = await getDoc(ref);
+        if (snap.exists() && snap.data().images) {
+          customImages = { ...customImages, ...snap.data().images };
+          localStorage.setItem('mrv_7a0_custom_imgs_v1', JSON.stringify(customImages));
+          updatePhotoCountPill();
+        }
+      } catch (e) {
+        console.warn('Cloud image load skipped:', e);
+      }
+    }
+
+    async function saveDevImagesToCloud() {
+      localStorage.setItem('mrv_7a0_custom_imgs_v1', JSON.stringify(customImages));
+      updatePhotoCountPill();
+      if (!cloudOnline || !db) return;
+      try {
+        const ref = doc(db, 'artifacts', appId, 'public', 'data', 'config', 'devImages');
+        await setDoc(ref, { images: customImages, updatedAt: Date.now() }, { merge: true });
+      } catch (e) {
+        console.warn('Cloud image save skipped:', e);
+      }
+    }
+
+    // =========================================================================
+    // 4. SHARE LINK & CLIPBOARD HELPERS
+    // =========================================================================
+    function isSandboxEnvironment() {
+      const proto = window.location.protocol;
+      const host = window.location.hostname || '';
+      return (
+        proto === 'blob:' ||
+        proto === 'file:' ||
+        host.includes('googleusercontent.com') ||
+        host.includes('usercontent.goog')
+      );
+    }
+
+    function buildShareableGameURL(extraParams = {}) {
+      let base = customPublicSiteBase.trim();
+      if (!base) {
+        base = window.location.href.split('?')[0].split('#')[0];
+      }
+      try {
+        const url = new URL(base);
+        Object.entries(extraParams).forEach(([k, v]) => {
+          if (v) url.searchParams.set(k, v);
+        });
+        return url.toString();
+      } catch (e) {
+        return base;
+      }
+    }
+
+    function updateCustomSiteBaseUrl(val) {
+      customPublicSiteBase = val.trim();
+      refreshShareLinkFields();
+    }
+
+    function refreshShareLinkFields(customUrl = null, extraLabel = '', extraValue = '') {
+      const input = document.getElementById('share-game-url-input');
+      const extraBox = document.getElementById('share-extra-box');
+      const extraLbl = document.getElementById('share-extra-label');
+      const extraVal = document.getElementById('share-extra-value');
+      const warnBox = document.getElementById('share-sandbox-warning');
+
+      if (warnBox) {
+        if (isSandboxEnvironment()) warnBox.classList.remove('hidden');
+        else warnBox.classList.add('hidden');
+      }
+
+      let shareUrl = customUrl;
+      if (!shareUrl) {
+        if (state.screen === 'TOURNAMENT' && state.tournament.roomCode) {
+          shareUrl = buildShareableGameURL({ room: state.tournament.roomCode });
+          extraLabel = 'Código da Sala Mata-Mata';
+          extraValue = state.tournament.roomCode;
+        } else if (state.squads[1] && getSquadTotals(state.squads[1]).count === 7) {
+          const code = encodeSquadCode(state.squads[1]);
+          shareUrl = buildShareableGameURL({ challenge: code });
+          extraLabel = 'Código do Seu Esquadrão (MRV2)';
+          extraValue = code;
+        } else {
+          shareUrl = buildShareableGameURL();
+        }
+      }
+
+      if (input) input.value = shareUrl;
+      if (extraBox && extraLabel && extraValue) {
+        extraBox.classList.remove('hidden');
+        extraLbl.textContent = extraLabel;
+        extraVal.value = extraValue;
+      } else if (extraBox) {
+        extraBox.classList.add('hidden');
+      }
+    }
+
+    function openShareLinkModal(customUrl = null, extraLabel = '', extraValue = '') {
+      const modal = document.getElementById('share-modal');
+      refreshShareLinkFields(customUrl, extraLabel, extraValue);
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeShareLinkModal() {
+      const modal = document.getElementById('share-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function copyTextValue(text, successMsg = 'Copiado para a área de transferência!') {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg, 'success');
+      } catch (e) {
+        showToast('Não foi possível copiar automaticamente. Selecione e copie manualmente.', 'warning');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function copyTextFromInput(inputId) {
+      const el = document.getElementById(inputId);
+      if (!el) return;
+      el.select();
+      copyTextValue(el.value, 'Link / Código copiado com sucesso!');
+    }
+
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const colors = {
+        info: 'bg-slate-900/95 border-slate-700 text-slate-100',
+        success: 'bg-emerald-950/95 border-emerald-500/60 text-emerald-200',
+        warning: 'bg-amber-950/95 border-amber-500/60 text-amber-200',
+        error: 'bg-rose-950/95 border-rose-500/60 text-rose-200'
+      };
+      const div = document.createElement('div');
+      div.className = `pointer-events-auto px-4 py-3 rounded-2xl border shadow-2xl text-xs font-semibold animate-enter ${colors[type] || colors.info}`;
+      div.textContent = msg;
+      container.appendChild(div);
+      setTimeout(() => {
+        div.style.opacity = '0';
+        div.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => div.remove(), 300);
+      }, 3200);
+    }
+
+    function handleUrlDeepLinks() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const roomParam = params.get('room');
+        const challengeParam = params.get('challenge');
+        if (roomParam) {
+          joinTournamentRoomByCode(roomParam.trim().toUpperCase());
+        } else if (challengeParam) {
+          const decoded = decodeSquadCode(challengeParam.trim());
+          if (decoded) {
+            state.squads[2] = decoded;
+            state.player2Name = decoded.ownerName || 'Amigo Desafiante';
+            state.mode = 'CODE_CHALLENGE';
+            showToast(`Desafio de ${state.player2Name} carregado! Monte seu time para duelar.`, 'success');
+          }
+        }
+      } catch (e) {
+        console.warn('Deep link parse skipped:', e);
+      }
+    }
+
+    // =========================================================================
+    // 5. SQUAD LOGIC, ENCODING & AI BUILDER
+    // =========================================================================
+    function createEmptySquad(ownerName, formationKey = '3-2-2') {
+      const form = FORMATIONS[formationKey] || FORMATIONS['3-2-2'];
+      const slots = [];
+      for (let i = 0; i < form.counts.OFE; i++) slots.push({ role: 'OFE', charId: null });
+      for (let i = 0; i < form.counts.EST; i++) slots.push({ role: 'EST', charId: null });
+      for (let i = 0; i < form.counts.SUP; i++) slots.push({ role: 'SUP', charId: null });
+      return {
+        ownerName: ownerName || 'Comandante',
+        formationKey: form.id,
+        slots
+      };
+    }
+
+    function computeSlotEffectiveStats(char, slotRole) {
+      let mult = 0.7;
+      let fitLabel = '70% Fora';
+      let fitBadgeClass = 'bg-rose-500/25 text-rose-200 border-rose-500/50';
+      if (char.primary === slotRole) {
+        mult = 1.0;
+        fitLabel = '100% Ideal';
+        fitBadgeClass = 'bg-emerald-500/25 text-emerald-200 border-emerald-500/50';
+      } else if (char.secondary === slotRole) {
+        mult = 0.9;
+        fitLabel = '90% Secundária';
+        fitBadgeClass = 'bg-amber-500/25 text-amber-200 border-amber-500/50';
+      }
+      return {
+        mult,
+        fitLabel,
+        fitBadgeClass,
+        ofe: Math.round(char.stats.ofe * mult),
+        est: Math.round(char.stats.est * mult),
+        sup: Math.round(char.stats.sup * mult),
+        ovr: Math.round(char.ovr * mult)
+      };
+    }
+
+    function getSquadTotals(squad) {
+      if (!squad || !squad.slots) return { count: 0, ofe: 0, est: 0, sup: 0, ovr: 0 };
+      let count = 0;
+      let ofe = 0;
+      let est = 0;
+      let sup = 0;
+      let ovr = 0;
+      squad.slots.forEach(slot => {
+        if (slot.charId && CHAR_MAP[slot.charId]) {
+          count++;
+          const eff = computeSlotEffectiveStats(CHAR_MAP[slot.charId], slot.role);
+          ofe += eff.ofe;
+          est += eff.est;
+          sup += eff.sup;
+          ovr += eff.ovr;
+        }
+      });
+      return { count, ofe, est, sup, ovr };
+    }
+
+    function encodeSquadCode(squad) {
+      const payload = {
+        n: squad.ownerName,
+        f: squad.formationKey,
+        s: squad.slots.map(sl => [sl.role, sl.charId])
+      };
+      const jsonStr = JSON.stringify(payload);
+      const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+      return `MRV2-${b64}`;
+    }
+
+    function decodeSquadCode(rawCode) {
+      try {
+        const clean = rawCode.trim();
+        if (!clean.startsWith('MRV2-')) return null;
+        const b64 = clean.slice(5);
+        const jsonStr = decodeURIComponent(escape(atob(b64)));
+        const data = JSON.parse(jsonStr);
+        if (!data || !Array.isArray(data.s) || data.s.length !== 7) return null;
+        const validSlots = data.s.map(([role, charId]) => {
+          if (!ROLE_META[role] || !CHAR_MAP[charId]) throw new Error('Slot inválido');
+          return { role, charId };
+        });
+        return {
+          ownerName: String(data.n || 'Rival').slice(0, 24),
+          formationKey: FORMATIONS[data.f] ? data.f : '3-2-2',
+          slots: validSlots
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function generateAISquad(aiName, difficulty = 'CLASSIC') {
+      const formKeys = Object.keys(FORMATIONS);
+      const chosenForm = formKeys[Math.floor(Math.random() * formKeys.length)];
+      const squad = createEmptySquad(aiName, chosenForm);
+      const usedIds = new Set();
+      const eraKeys = Object.keys(ERAS);
+
+      for (let r = 0; r < 7; r++) {
+        const eraId = eraKeys[Math.floor(Math.random() * eraKeys.length)];
+        const pool = CHARACTERS.filter(c => c.era === eraId && !usedIds.has(c.id));
+        const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, 3);
+        const openIndices = squad.slots.map((s, idx) => (!s.charId ? idx : -1)).filter(idx => idx !== -1);
+
+        let bestPair = { char: shuffled[0], slotIdx: openIndices[0], score: -1 };
+        shuffled.forEach(ch => {
+          openIndices.forEach(idx => {
+            const eff = computeSlotEffectiveStats(ch, squad.slots[idx].role);
+            let score = eff.ovr + (eff.mult * 25);
+            if (difficulty === 'CASUAL') score += Math.random() * 35;
+            else if (difficulty === 'CLASSIC') score += Math.random() * 14;
+            else score += Math.random() * 4; // OMEGA
+            if (score > bestPair.score) {
+              bestPair = { char: ch, slotIdx: idx, score };
+            }
+          });
+        });
+
+        if (bestPair.char && bestPair.slotIdx !== undefined) {
+          usedIds.add(bestPair.char.id);
+          squad.slots[bestPair.slotIdx].charId = bestPair.char.id;
+        }
+      }
+      return squad;
+    }
+
+    // =========================================================================
+    // 6. CARD & SQUARE AVATAR RENDERING HELPERS
+    // =========================================================================
+    function renderFallbackSvg(char) {
+      const c1 = (char.colors && char.colors[0]) || '#1e293b';
+      const c2 = (char.colors && char.colors[1]) || '#38bdf8';
+      return `
+        <svg viewBox="0 0 200 260" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad-${char.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${c1}" />
+              <stop offset="100%" stop-color="#090b12" />
+            </linearGradient>
+          </defs>
+          <rect width="200" height="260" fill="url(#grad-${char.id})" />
+          <circle cx="100" cy="95" r="46" fill="none" stroke="${c2}" stroke-width="3" stroke-opacity="0.7" />
+          <text x="100" y="106" text-anchor="middle" fill="${c2}" font-family="Orbitron, sans-serif" font-weight="900" font-size="30">${char.mono || 'MV'}</text>
+        </svg>
+      `;
+    }
+
+    function renderDraftOptionCard(char, isSelected, lockInfo = null) {
+      const era = ERAS[char.era];
+      const roleP = ROLE_META[char.primary];
+      const roleS = ROLE_META[char.secondary];
+      const imgUrl = getEffectiveCharImage(char);
+      const isLocked = !!lockInfo;
+
+      return `
+        <div onclick="${isLocked ? `showLockedCardToast('${lockInfo.reason.replace(/'/g, "\\'")}')` : `selectDraftCard('${char.id}')`}"
+          class="marvel-card ${era.cardClass} rounded-3xl border-2 ${isLocked ? 'border-rose-500/70 opacity-75 cursor-not-allowed' : (isSelected ? 'border-sky-400 ring-4 ring-sky-400/35 scale-[1.02] cursor-pointer' : 'border-slate-700/80 hover:border-slate-500 cursor-pointer')} h-[390px] sm:h-[420px] flex flex-col justify-between p-4 select-none">
+          
+          ${imgUrl ? `
+            <img src="${imgUrl}" alt="${char.name}" class="card-fullbleed-img ${isLocked ? 'grayscale' : ''}"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div style="display:none" class="card-fullbleed-img">${renderFallbackSvg(char)}</div>
+          ` : `
+            <div class="card-fullbleed-img">${renderFallbackSvg(char)}</div>
+          `}
+          <div class="absolute inset-0 card-fullbleed-gradient pointer-events-none"></div>
+
+          ${isLocked ? `
+            <div class="relative z-20 rounded-2xl bg-rose-950/90 border border-rose-500 px-3 py-2 text-center shadow-xl">
+              <div class="text-[10px] font-display font-black uppercase text-rose-300">🔒 Card Indisponível</div>
+              <div class="text-[11px] font-bold text-white leading-tight mt-0.5">${lockInfo.reason}</div>
+            </div>
+          ` : ''}
+
+          <!-- Top Header -->
+          <div class="relative z-10 flex items-start justify-between gap-2">
+            <span class="px-2.5 py-1 rounded-xl border text-[10px] font-bold backdrop-blur-md ${era.badgeBg}">
+              ${era.icon} ${era.short}
+            </span>
+            <div class="px-2.5 py-1 rounded-xl bg-slate-950/85 border border-amber-400/50 text-center shadow-lg">
+              <div class="text-[9px] font-bold text-amber-300 uppercase leading-none">OVR</div>
+              <div class="font-display font-black text-base text-white leading-tight">${char.ovr}</div>
+            </div>
+          </div>
+
+          <!-- Bottom Glass Attribute Panel -->
+          <div class="relative z-10 card-glass-panel rounded-2xl p-3 space-y-2.5">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <h4 class="font-hero font-bold text-lg text-white leading-tight truncate">${char.name}</h4>
+              </div>
+              <div class="flex items-center gap-1.5 mt-1">
+                <span class="px-2 py-0.5 rounded-md border text-[10px] font-extrabold ${roleP.bg} ${roleP.color}">★ ${roleP.short} (100%)</span>
+                <span class="px-2 py-0.5 rounded-md bg-slate-900/80 border border-slate-700 text-[10px] font-bold text-slate-300">${roleS.short} (90%)</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-1.5 text-center">
+              <div class="rounded-xl bg-slate-950/75 px-2 py-1 border border-rose-500/30">
+                <div class="text-[9px] font-bold text-rose-300">OFE</div>
+                <div class="font-display font-extrabold text-xs text-white">${char.stats.ofe}</div>
+              </div>
+              <div class="rounded-xl bg-slate-950/75 px-2 py-1 border border-sky-500/30">
+                <div class="text-[9px] font-bold text-sky-300">EST</div>
+                <div class="font-display font-extrabold text-xs text-white">${char.stats.est}</div>
+              </div>
+              <div class="rounded-xl bg-slate-950/75 px-2 py-1 border border-emerald-500/30">
+                <div class="text-[9px] font-bold text-emerald-300">SUP</div>
+                <div class="font-display font-extrabold text-xs text-white">${char.stats.sup}</div>
+              </div>
+            </div>
+
+            <p class="text-[10px] text-slate-300 line-clamp-2 leading-snug">${char.feat}</p>
+
+            <div class="pt-0.5">
+              <div class="w-full py-1.5 rounded-xl text-center text-xs font-extrabold transition ${isLocked ? 'bg-rose-950/90 text-rose-300 border border-rose-500/40' : (isSelected ? 'bg-sky-500 text-slate-950' : 'bg-white/15 text-white hover:bg-white/25')}">
+                ${isLocked ? '🚫 Bloqueado' : (isSelected ? '✓ Card Selecionado (Escolha a Vaga)' : 'Selecionar Card')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSquareSquadCard(slot, idx, interactive = false, selectedChar = null) {
+      const roleMeta = ROLE_META[slot.role];
+      const char = slot.charId ? CHAR_MAP[slot.charId] : null;
+      const isTargetReady = interactive && !char && !!selectedChar;
+
+      if (!char) {
+        let previewHtml = `<span class="text-[11px] text-slate-400">Vaga Aberta</span>`;
+        if (selectedChar) {
+          const prev = computeSlotEffectiveStats(selectedChar, slot.role);
+          previewHtml = `
+            <span class="px-2 py-0.5 rounded-lg border text-[10px] font-extrabold ${prev.fitBadgeClass}">
+              ${prev.fitLabel} • OVR ${prev.ovr}
+            </span>
+          `;
+        }
+        return `
+          <div onclick="${interactive ? `assignSelectedCardToSlot(${idx})` : ''}"
+            class="aspect-square rounded-2xl border-2 border-dashed border-slate-700 bg-slate-950/70 p-3 flex flex-col items-center justify-between text-center transition ${isTargetReady ? 'slot-ready cursor-pointer hover:scale-[1.02]' : ''}">
+            <span class="px-2.5 py-0.5 rounded-lg border text-[10px] font-extrabold ${roleMeta.bg} ${roleMeta.color}">
+              Vaga ${idx + 1} • ${roleMeta.short}
+            </span>
+            <div class="w-11 h-11 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 font-display font-bold text-lg">
+              +
+            </div>
+            ${previewHtml}
+          </div>
+        `;
+      }
+
+      const eff = computeSlotEffectiveStats(char, slot.role);
+      const era = ERAS[char.era];
+      const imgUrl = getEffectiveCharImage(char);
+
+      return `
+        <div class="aspect-square relative rounded-2xl border-2 border-slate-700/90 overflow-hidden bg-slate-900 shadow-lg group">
+          ${imgUrl ? `
+            <img src="${imgUrl}" alt="${char.name}" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-300"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div style="display:none" class="w-full h-full">${renderFallbackSvg(char)}</div>
+          ` : renderFallbackSvg(char)}
+
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent"></div>
+
+          <!-- Top Badges -->
+          <div class="absolute top-2 left-2 right-2 flex items-center justify-between gap-1">
+            <span class="px-2 py-0.5 rounded-lg border text-[10px] font-extrabold backdrop-blur-md ${roleMeta.bg} ${roleMeta.color}">
+              ${roleMeta.short}
+            </span>
+            <span class="px-2 py-0.5 rounded-lg bg-slate-950/85 border border-amber-400/50 font-display font-black text-xs text-amber-300">
+              ${eff.ovr}
+            </span>
+          </div>
+
+          <!-- Bottom Identity Overlay -->
+          <div class="absolute bottom-2 left-2 right-2 space-y-1">
+            <div class="text-[9px] font-bold text-slate-300 truncate">${era.icon} ${era.short}</div>
+            <div class="font-hero font-bold text-sm text-white leading-tight truncate">${char.name}</div>
+            <div class="flex items-center justify-between gap-1">
+              <span class="px-1.5 py-0.5 rounded border text-[9px] font-bold ${eff.fitBadgeClass}">${eff.fitLabel}</span>
+              <span class="text-[9px] font-mono text-slate-300">O:${eff.ofe} E:${eff.est} S:${eff.sup}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 7. NAVIGATION & HOME SCREEN
+    // =========================================================================
+    function goHome() {
+      if (rouletteTimerId) {
+        clearInterval(rouletteTimerId);
+        rouletteTimerId = null;
+      }
+      state.screen = 'HOME';
+      render();
+    }
+
+    function renderHome() {
+      const challengeBanner = (state.mode === 'CODE_CHALLENGE' && state.squads[2]) ? `
+        <div class="rounded-3xl bg-gradient-to-r from-emerald-950/90 to-sky-950/90 border border-emerald-400/50 p-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold uppercase">Desafio de Amigo Ativo</span>
+            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-1">Esquadrão de ${state.squads[2].ownerName} pronto para o duelo!</h3>
+          </div>
+          <button onclick="clearChallenge()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-bold text-slate-300">Cancelar Desafio</button>
+        </div>
+      ` : '';
+
+      return `
+        <div class="space-y-8 animate-enter">
+          ${challengeBanner}
+
+          <!-- Hero Header -->
+          <section class="relative rounded-3xl border border-slate-800 bg-gradient-to-br from-surface via-slate-900 to-void p-6 sm:p-10 overflow-hidden shadow-2xl">
+            <div class="max-w-3xl space-y-4 relative z-10">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/40 text-purple-300 text-xs font-bold">
+                <span>⚡</span> Draft Tático • 51 Personagens • 5 Obras Marvel
+              </div>
+              <h2 class="font-display text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
+                7 a 0: <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-amber-300 to-emerald-400">Arena do Multiverso</span>
+              </h2>
+              <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+                Gire a roleta das sagas, recrute 7 heróis ou vilões, encaixe cada lenda na formação ideal e vença o duelo tático em 4 Atos.
+              </p>
+              <div class="flex flex-wrap gap-2 pt-1">
+                ${Object.values(ERAS).map(e => `
+                  <span class="px-2.5 py-1 rounded-xl border text-xs font-bold ${e.badgeBg}">${e.icon} ${e.short}</span>
+                `).join('')}
+              </div>
+            </div>
+          </section>
+
+          <!-- Game Modes Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Mode 1: Solo vs IA -->
+            <div class="rounded-3xl bg-surface border border-slate-800 p-6 space-y-4 shadow-xl">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-bold">🤖 Modo Solo</span>
+                <span class="text-xs text-slate-400">Draft vs Inteligência Artificial</span>
+              </div>
+              <h3 class="font-display text-xl font-bold text-white">Duelo Rápido contra a IA</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Seu Nome</label>
+                  <input id="solo-p1-name" type="text" value="${state.player1Name}"
+                    class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-semibold text-white" />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Formação</label>
+                  <select id="solo-formation" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-semibold text-white">
+                    <option value="3-2-2">3-2-2 (Agressiva)</option>
+                    <option value="2-3-2">2-3-2 (Mente Mestra)</option>
+                    <option value="2-2-3">2-2-3 (Fortaleza)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Dificuldade IA</label>
+                  <select id="solo-difficulty" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-semibold text-white">
+                    <option value="CASUAL">Casual</option>
+                    <option value="CLASSIC" selected>Clássico</option>
+                    <option value="OMEGA">Nível Ômega</option>
+                  </select>
+                </div>
+              </div>
+              <button onclick="startSoloDraft()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 font-display font-bold text-sm text-white shadow-lg transition">
+                🚀 Iniciar Draft vs IA
+              </button>
+            </div>
+
+            <!-- Mode 2: 2 Players Local / Pass & Play -->
+            <div class="rounded-3xl bg-surface border border-slate-800 p-6 space-y-4 shadow-xl">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold">👥 2 Jogadores</span>
+                <span class="text-xs text-slate-400">Pass & Play na Mesma Tela</span>
+              </div>
+              <h3 class="font-display text-xl font-bold text-white">Duelo Local (1v1)</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="space-y-2">
+                  <label class="block text-[11px] font-bold text-slate-400 uppercase">Jogador 1 & Formação</label>
+                  <input id="pvp-p1-name" type="text" value="${state.player1Name}"
+                    class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-semibold text-white" />
+                  <select id="pvp-p1-form" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-semibold text-white">
+                    <option value="3-2-2">3-2-2 (Agressiva)</option>
+                    <option value="2-3-2">2-3-2 (Mente Mestra)</option>
+                    <option value="2-2-3">2-2-3 (Fortaleza)</option>
+                  </select>
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-[11px] font-bold text-slate-400 uppercase">Jogador 2 & Formação</label>
+                  <input id="pvp-p2-name" type="text" value="${state.player2Name}"
+                    class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-semibold text-white" />
+                  <select id="pvp-p2-form" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-semibold text-white">
+                    <option value="3-2-2">3-2-2 (Agressiva)</option>
+                    <option value="2-3-2" selected>2-3-2 (Mente Mestra)</option>
+                    <option value="2-2-3">2-2-3 (Fortaleza)</option>
+                  </select>
+                </div>
+              </div>
+              <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer select-none pt-1">
+                <input type="checkbox" ${state.exclusivePlayerCards ? 'checked' : ''} onchange="toggleExclusivePlayerCards(this.checked)"
+                  class="rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-0" />
+                <span>🔒 Bloquear card repetido entre players (apenas para players)</span>
+              </label>
+              <button onclick="startPassPlayDraft()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 font-display font-bold text-sm text-white shadow-lg transition">
+                ⚔️ Iniciar Draft 2 Jogadores
+              </button>
+            </div>
+
+            <!-- Mode 3: Challenge Friend Code -->
+            <div class="rounded-3xl bg-surface border border-slate-800 p-6 space-y-4 shadow-xl">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-xl bg-sky-500/20 text-sky-300 border border-sky-500/40 text-xs font-bold">🧬 Desafio por Código</span>
+                <span class="text-xs text-slate-400">Funciona Online e Offline</span>
+              </div>
+              <h3 class="font-display text-xl font-bold text-white">Desafiar Esquadrão de Amigo</h3>
+              <p class="text-xs text-slate-400">Cole o código <code>MRV2-...</code> que um amigo gerou ao terminar o draft dele, monte o seu time e duelem!</p>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input id="home-challenge-code" type="text" placeholder="Cole o código MRV2-... aqui"
+                  class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs font-mono text-white" />
+                <button onclick="startCodeChallengeFromInput()" class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 font-display font-bold text-xs text-white shrink-0">
+                  Desafiar Time
+                </button>
+              </div>
+            </div>
+
+            <!-- Mode 4: Mata-Mata Tournament -->
+            <div class="rounded-3xl bg-surface border border-slate-800 p-6 space-y-4 shadow-xl">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold">🏆 Torneio Mata-Mata</span>
+                <span class="text-xs text-slate-400">4 ou 8 Times • Sala Online</span>
+              </div>
+              <h3 class="font-display text-xl font-bold text-white">Copa do Multiverso</h3>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="createTournamentLobby(4)" class="flex-1 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-display font-bold text-xs text-white">
+                  Criar Sala 4 Times
+                </button>
+                <button onclick="createTournamentLobby(8)" class="flex-1 py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 font-display font-bold text-xs text-white">
+                  Criar Sala 8 Times
+                </button>
+              </div>
+              <div class="flex gap-2">
+                <input id="join-room-code-input" type="text" placeholder="Código da Sala (ex: SL-4821)"
+                  class="flex-1 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-mono text-white uppercase" />
+                <button onclick="joinTournamentFromInput()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-emerald-300 border border-slate-700">
+                  Entrar na Sala
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function clearChallenge() {
+      state.mode = 'SOLO';
+      state.squads[2] = null;
+      render();
+    }
+
+    // =========================================================================
+    // 8. DRAFT ENGINE WITH 1.5s ROULETTE, EXCLUSIVITY & SQUARE SQUAD CARDS
+    // =========================================================================
+    function toggleExclusivePlayerCards(checked) {
+      state.exclusivePlayerCards = !!checked;
+    }
+
+    function showLockedCardToast(reason) {
+      showToast(`Card bloqueado: ${reason}`, 'warning');
+    }
+
+    function initDraftState(firstEra = 'INFINITY') {
+      state.draft = {
+        round: 1,
+        rerolls: 2,
+        currentEra: firstEra,
+        options: [],
+        selectedCharId: null,
+        spinning: false,
+        awaitingSpin: true
+      };
+    }
+
+    function startSoloDraft() {
+      const p1Name = document.getElementById('solo-p1-name')?.value.trim() || 'Jogador 1';
+      const form = document.getElementById('solo-formation')?.value || '3-2-2';
+      const diff = document.getElementById('solo-difficulty')?.value || 'CLASSIC';
+
+      state.player1Name = p1Name;
+      state.difficulty = diff;
+      state.squads[1] = createEmptySquad(p1Name, form);
+
+      if (state.mode !== 'CODE_CHALLENGE' || !state.squads[2]) {
+        state.mode = 'SOLO';
+        const aiTitle = diff === 'OMEGA' ? 'IA Ômega (Destino)' : (diff === 'CASUAL' ? 'IA Recruta' : 'IA Vingadores');
+        state.player2Name = aiTitle;
+        state.squads[2] = generateAISquad(aiTitle, diff);
+      }
+
+      state.activeDraftPlayer = 1;
+      initDraftState();
+      state.screen = 'DRAFT';
+      render();
+    }
+
+    function startPassPlayDraft() {
+      const p1Name = document.getElementById('pvp-p1-name')?.value.trim() || 'Jogador 1';
+      const p2Name = document.getElementById('pvp-p2-name')?.value.trim() || 'Jogador 2';
+      const f1 = document.getElementById('pvp-p1-form')?.value || '3-2-2';
+      const f2 = document.getElementById('pvp-p2-form')?.value || '2-3-2';
+
+      state.mode = 'PASS_PLAY';
+      state.player1Name = p1Name;
+      state.player2Name = p2Name;
+      state.squads[1] = createEmptySquad(p1Name, f1);
+      state.squads[2] = createEmptySquad(p2Name, f2);
+      state.activeDraftPlayer = 1;
+      initDraftState();
+      state.screen = 'DRAFT';
+      render();
+    }
+
+    function startCodeChallengeFromInput() {
+      const raw = document.getElementById('home-challenge-code')?.value || '';
+      const decoded = decodeSquadCode(raw);
+      if (!decoded) {
+        showToast('Código inválido! Certifique-se de colar um código começando com MRV2-.', 'error');
+        return;
+      }
+      state.mode = 'CODE_CHALLENGE';
+      state.squads[2] = decoded;
+      state.player2Name = decoded.ownerName;
+      showToast(`Esquadrão de ${decoded.ownerName} carregado! Clique em "Iniciar Draft vs IA" para montar o seu.`, 'success');
+      render();
+    }
+
+    function getDraftedIdsSet(squad) {
+      const set = new Set();
+      if (!squad) return set;
+      squad.slots.forEach(s => { if (s.charId) set.add(s.charId); });
+      return set;
+    }
+
+    function getDraftedBaseHeroesSet(squad) {
+      const set = new Set();
+      if (!squad) return set;
+      squad.slots.forEach(s => {
+        if (s.charId && CHAR_MAP[s.charId]) {
+          set.add(CHAR_MAP[s.charId].baseHero || s.charId);
+        }
+      });
+      return set;
+    }
+
+    // Returns a Map of charId -> ownerName for cards already picked by OTHER human players
+    function getOtherHumanPlayersTakenCardsMap() {
+      const takenMap = new Map();
+      if (!state.exclusivePlayerCards) return takenMap;
+
+      if (state.mode === 'PASS_PLAY' && state.activeDraftPlayer === 2 && state.squads[1]) {
+        state.squads[1].slots.forEach(sl => {
+          if (sl.charId) takenMap.set(sl.charId, state.squads[1].ownerName);
+        });
+      } else if (state.mode === 'CODE_CHALLENGE' && state.squads[2]) {
+        state.squads[2].slots.forEach(sl => {
+          if (sl.charId) takenMap.set(sl.charId, state.squads[2].ownerName);
+        });
+      } else if (state.mode === 'TOURNAMENT_DRAFT' && Array.isArray(state.tournament.participants)) {
+        state.tournament.participants.forEach((p, idx) => {
+          if (idx === state.tournament.targetSlotIndex) return;
+          if (p.occupantType === 'PLAYER' && p.squad && Array.isArray(p.squad.slots)) {
+            p.squad.slots.forEach(sl => {
+              if (sl.charId) takenMap.set(sl.charId, p.name);
+            });
+          }
+        });
+      }
+      return takenMap;
+    }
+
+    function getCardLockReason(char) {
+      if (!char) return null;
+      const activeSquad = state.squads[state.activeDraftPlayer];
+      const myIds = getDraftedIdsSet(activeSquad);
+      const myBaseHeroes = getDraftedBaseHeroesSet(activeSquad);
+
+      if (myIds.has(char.id)) {
+        return { reason: 'Você já escalou este card no seu time' };
+      }
+      const heroKey = char.baseHero || char.id;
+      if (myBaseHeroes.has(heroKey)) {
+        return { reason: `Você já possui uma versão de ${char.baseName || char.name} no time` };
+      }
+
+      const otherPlayersMap = getOtherHumanPlayersTakenCardsMap();
+      if (otherPlayersMap.has(char.id)) {
+        return { reason: `Já escolhido por ${otherPlayersMap.get(char.id)}` };
+      }
+      return null;
+    }
+
+    function dealDraftOptionsForEra(eraId) {
+      // Prioritize eligible cards first so players rarely see blocked cards unless pool is exhausted
+      let eligibleInEra = CHARACTERS.filter(c => c.era === eraId && !getCardLockReason(c));
+      let fallbackInEra = CHARACTERS.filter(c => c.era === eraId && !!getCardLockReason(c));
+
+      let picked = [...eligibleInEra].sort(() => Math.random() - 0.5).slice(0, 3);
+      if (picked.length < 3) {
+        const extraEligible = CHARACTERS.filter(c => c.era !== eraId && !getCardLockReason(c))
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 3 - picked.length);
+        picked = [...picked, ...extraEligible];
+      }
+      if (picked.length < 3) {
+        const extraLocked = fallbackInEra.sort(() => Math.random() - 0.5).slice(0, 3 - picked.length);
+        picked = [...picked, ...extraLocked];
+      }
+
+      state.draft.currentEra = eraId;
+      state.draft.options = picked;
+      state.draft.selectedCharId = null;
+      state.draft.awaitingSpin = false;
+      state.draft.spinning = false;
+    }
+
+    function spinEraRoulette(isReroll = false) {
+      if (state.draft.spinning) return;
+      if (isReroll) {
+        if (state.draft.rerolls <= 0) {
+          showToast('Você já usou seus 2 rerolls neste draft!', 'warning');
+          return;
+        }
+        state.draft.rerolls--;
+      }
+
+      if (rouletteTimerId) clearInterval(rouletteTimerId);
+      state.draft.spinning = true;
+      state.draft.selectedCharId = null;
+      render();
+
+      const eraKeys = Object.keys(ERAS);
+      let tick = 0;
+      const intervalMs = 100;
+      const totalTicks = 15; // 1.5s spin duration
+
+      rouletteTimerId = setInterval(() => {
+        tick++;
+        const nextEra = eraKeys[tick % eraKeys.length];
+        state.draft.currentEra = nextEra;
+        const bannerTitle = document.getElementById('roulette-era-headline');
+        const bannerIcon = document.getElementById('roulette-era-icon');
+        if (bannerTitle && bannerIcon) {
+          bannerTitle.textContent = ERAS[nextEra].name.toUpperCase();
+          bannerIcon.textContent = ERAS[nextEra].icon;
+        }
+
+        if (tick >= totalTicks) {
+          clearInterval(rouletteTimerId);
+          rouletteTimerId = null;
+          const finalEra = eraKeys[Math.floor(Math.random() * eraKeys.length)];
+          dealDraftOptionsForEra(finalEra);
+          render();
+        }
+      }, intervalMs);
+    }
+
+    function selectDraftCard(charId) {
+      if (state.draft.spinning || state.draft.awaitingSpin) return;
+      const char = CHAR_MAP[charId];
+      const lock = getCardLockReason(char);
+      if (lock) {
+        showLockedCardToast(lock.reason);
+        return;
+      }
+      state.draft.selectedCharId = (state.draft.selectedCharId === charId) ? null : charId;
+      render();
+    }
+
+    function assignSelectedCardToSlot(slotIdx) {
+      const charId = state.draft.selectedCharId;
+      if (!charId) {
+        showToast('Selecione primeiro um dos 3 cards acima!', 'warning');
+        return;
+      }
+      const char = CHAR_MAP[charId];
+      const lock = getCardLockReason(char);
+      if (lock) {
+        state.draft.selectedCharId = null;
+        showLockedCardToast(lock.reason);
+        render();
+        return;
+      }
+
+      const squad = state.squads[state.activeDraftPlayer];
+      if (!squad || !squad.slots[slotIdx] || squad.slots[slotIdx].charId) return;
+
+      squad.slots[slotIdx].charId = charId;
+      state.draft.selectedCharId = null;
+
+      // Sync partial progress in simultaneous tournament draft so other players see taken cards live
+      if (state.mode === 'TOURNAMENT_DRAFT') {
+        const tIdx = state.tournament.targetSlotIndex;
+        if (tIdx !== null && state.tournament.participants[tIdx]) {
+          state.tournament.participants[tIdx].squad = squad;
+          state.tournament.participants[tIdx].draftProgress = getSquadTotals(squad).count;
+          syncTournamentRoomToCloud();
+        }
+      }
+
+      if (state.draft.round < 7) {
+        state.draft.round++;
+        state.draft.awaitingSpin = true;
+        state.draft.options = [];
+        render();
+        return;
+      }
+
+      // Finished 7 rounds for active player!
+      if (state.mode === 'PASS_PLAY' && state.activeDraftPlayer === 1) {
+        state.activeDraftPlayer = 2;
+        initDraftState();
+        showToast(`${state.player1Name} concluiu o time! Agora é a vez de ${state.player2Name}.`, 'success');
+        render();
+        return;
+      }
+
+      if (state.mode === 'TOURNAMENT_DRAFT') {
+        const idx = state.tournament.targetSlotIndex;
+        if (idx !== null && state.tournament.participants[idx]) {
+          state.tournament.participants[idx].squad = squad;
+          state.tournament.participants[idx].draftProgress = 7;
+        }
+        // Check if another local human player in the same browser still needs to draft
+        const nextLocalHumanIdx = state.tournament.participants.findIndex(
+          p => p.occupantType === 'PLAYER' && p.playerId === localSessionId && getSquadTotals(p.squad).count < 7
+        );
+        if (nextLocalHumanIdx !== -1) {
+          startTournamentDraftForSlot(nextLocalHumanIdx);
+          showToast(`Agora é a vez de ${state.tournament.participants[nextLocalHumanIdx].name} fazer o draft!`, 'info');
+          return;
+        }
+
+        // Check if ALL participants in the tournament have finished their 7-card draft
+        checkAndAdvanceTournamentIfAllDrafted();
+        state.screen = 'TOURNAMENT';
+        syncTournamentRoomToCloud();
+        showToast('Seu esquadrão de 7 cards está pronto para o Mata-Mata!', 'success');
+        render();
+        return;
+      }
+
+      // Transition to Pre-Battle Screen
+      preparePreBattle();
+    }
+
+    function renderDraft() {
+      const activeSquad = state.squads[state.activeDraftPlayer];
+      const totals = getSquadTotals(activeSquad);
+      const era = ERAS[state.draft.currentEra] || ERAS.INFINITY;
+      const selectedChar = state.draft.selectedCharId ? CHAR_MAP[state.draft.selectedCharId] : null;
+      const allOptionsLocked = state.draft.options.length > 0 && state.draft.options.every(ch => !!getCardLockReason(ch));
+
+      return `
+        <div class="space-y-6 animate-enter">
+          <!-- Draft Header Status -->
+          <div class="rounded-3xl bg-surface border border-slate-800 p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-extrabold">
+                  Rodada ${state.draft.round} de 7
+                </span>
+                <span class="text-xs text-slate-400">Formação: <strong class="text-white">${activeSquad.formationKey}</strong></span>
+                ${state.exclusivePlayerCards && state.mode !== 'SOLO' ? `
+                  <span class="px-2 py-0.5 rounded-lg bg-sky-500/15 text-sky-300 border border-sky-500/30 text-[10px] font-bold">
+                    🔒 Exclusividade entre Players Ativa
+                  </span>
+                ` : ''}
+              </div>
+              <h2 class="font-display text-lg sm:text-2xl font-black text-white mt-1">
+                Draft de <span class="text-sky-400">${activeSquad.ownerName}</span>
+              </h2>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="px-3.5 py-2 rounded-2xl bg-slate-950 border border-slate-800 text-center">
+                <div class="text-[10px] font-bold text-slate-400 uppercase">Overall Atual</div>
+                <div class="font-display font-black text-lg text-amber-300">${totals.ovr}</div>
+              </div>
+              <button onclick="spinEraRoulette(true)" ${state.draft.rerolls <= 0 || state.draft.spinning || state.draft.awaitingSpin ? 'disabled' : ''}
+                class="px-4 py-2.5 rounded-2xl border text-xs font-extrabold transition flex items-center gap-1.5 ${state.draft.rerolls > 0 && !state.draft.spinning && !state.draft.awaitingSpin ? 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-400/50 text-amber-200' : 'bg-slate-900 border-slate-800 text-slate-500 cursor-not-allowed'}">
+                <span>🔄</span> Reroll (${state.draft.rerolls}/2)
+              </button>
+            </div>
+          </div>
+
+          <!-- Prominent Movie / Series Roulette Banner -->
+          <div class="rounded-3xl border-2 ${state.draft.spinning ? 'border-amber-400 roulette-spinning' : 'border-slate-700/90'} bg-gradient-to-r from-slate-950 via-surface to-slate-950 p-5 sm:p-7 text-center space-y-4 shadow-2xl">
+            <div class="text-xs font-extrabold uppercase tracking-widest text-slate-400">
+              ${state.draft.spinning ? '🎰 Sorteando Obra do Multiverso...' : (state.draft.awaitingSpin ? 'Pronto para Sortear a Próxima Obra' : '🎬 Obra Sorteada Nesta Rodada')}
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <span id="roulette-era-icon" class="text-3xl sm:text-5xl">${state.draft.awaitingSpin ? '🎲' : era.icon}</span>
+              <h3 id="roulette-era-headline" class="font-display text-2xl sm:text-4xl lg:text-5xl font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-purple-300">
+                ${state.draft.awaitingSpin ? 'CLIQUE PARA SORTEAR FILME / SÉRIE' : era.name.toUpperCase()}
+              </h3>
+            </div>
+
+            ${state.draft.awaitingSpin ? `
+              <div class="pt-1">
+                <button onclick="spinEraRoulette(false)"
+                  class="px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-amber-500 to-emerald-600 hover:brightness-110 font-display font-black text-sm sm:text-base text-white shadow-2xl transition transform hover:scale-105">
+                  🎰 Sortear Filme / Série (Rodada ${state.draft.round}/7)
+                </button>
+              </div>
+            ` : `
+              <p class="text-xs text-slate-300">
+                ${state.draft.spinning ? 'Aguarde 1,5s enquanto o Multiverso revela os 3 candidatos...' : 'Escolha 1 dos 3 cards disponíveis abaixo e clique na vaga desejada do seu esquadrão:'}
+              </p>
+              ${allOptionsLocked ? `
+                <button onclick="dealDraftOptionsForEra('${state.draft.currentEra}'); render();"
+                  class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-bold text-white">
+                  🔄 Re-sortear Opções Disponíveis (Grátis)
+                </button>
+              ` : ''}
+            `}
+          </div>
+
+          <!-- 3 Draft Candidate Cards -->
+          ${(!state.draft.awaitingSpin && !state.draft.spinning && state.draft.options.length > 0) ? `
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              ${state.draft.options.map(ch => renderDraftOptionCard(ch, state.draft.selectedCharId === ch.id, getCardLockReason(ch))).join('')}
+            </div>
+          ` : ''}
+
+          <!-- Assembled Squad (7 Square Profile Cards) -->
+          <div class="rounded-3xl bg-surface border border-slate-800 p-5 space-y-4 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="font-display text-base sm:text-lg font-bold text-white">Seu Esquadrão (${totals.count}/7 Escalados)</h4>
+                <p class="text-xs text-slate-400">
+                  ${selectedChar ? `Clique em uma vaga aberta para escalar <strong class="text-sky-300">${selectedChar.name}</strong>.` : 'Selecione um card acima para visualizar o encaixe nas vagas quadradas abaixo.'}
+                </p>
+              </div>
+              <div class="flex items-center gap-2 text-xs font-bold">
+                <span class="px-2.5 py-1 rounded-xl bg-rose-500/15 text-rose-300 border border-rose-500/30">OFE: ${totals.ofe}</span>
+                <span class="px-2.5 py-1 rounded-xl bg-sky-500/15 text-sky-300 border border-sky-500/30">EST: ${totals.est}</span>
+                <span class="px-2.5 py-1 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">SUP: ${totals.sup}</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+              ${activeSquad.slots.map((slot, idx) => renderSquareSquadCard(slot, idx, true, selectedChar)).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 9. PRE-BATTLE SCREEN (WIN % BAR, FAVORITISM LOG & READY BUTTONS)
+    // =========================================================================
+    function analyzeMatchup(s1, s2) {
+      const t1 = getSquadTotals(s1);
+      const t2 = getSquadTotals(s2);
+
+      const score1 = t1.ovr * 1.35 + t1.ofe * 0.9 + t1.est * 0.9 + t1.sup * 0.9;
+      const score2 = t2.ovr * 1.35 + t2.ofe * 0.9 + t2.est * 0.9 + t2.sup * 0.9;
+      const diff = score1 - score2;
+
+      // Logistic curve for realistic win probability between 12% and 88%
+      const rawProb1 = 1 / (1 + Math.exp(-diff / 42));
+      const prob1 = Math.max(12, Math.min(88, Math.round(rawProb1 * 100)));
+      const prob2 = 100 - prob1;
+
+      const absDiff = Math.abs(prob1 - prob2);
+      let verdictTitle = '';
+      let verdictLog = '';
+
+      if (absDiff <= 6) {
+        verdictTitle = '⚖️ Confronto Extremamente Acirrado!';
+        verdictLog = `Equilíbrio absoluto no Multiverso (${prob1}% vs ${prob2}%). Qualquer encaixe de posição ou detalhe em Estratégia/Suporte pode decidir no último ato!`;
+      } else if (prob1 > prob2) {
+        const strongAreas = [];
+        if (t1.ofe > t2.ofe) strongAreas.push(`Poder Ofensivo (${t1.ofe} vs ${t2.ofe})`);
+        if (t1.est > t2.est) strongAreas.push(`Estratégia (${t1.est} vs ${t2.est})`);
+        if (t1.sup > t2.sup) strongAreas.push(`Suporte (${t1.sup} vs ${t2.sup})`);
+        verdictTitle = `🔥 Favoritismo para ${s1.ownerName} (${prob1}%)`;
+        verdictLog = `${s1.ownerName} entra como favorito com Overall ${t1.ovr} contra ${t2.ovr} de ${s2.ownerName}${strongAreas.length ? `, levando vantagem em ${strongAreas.join(' e ')}` : ''}.`;
+      } else {
+        const strongAreas = [];
+        if (t2.ofe > t1.ofe) strongAreas.push(`Poder Ofensivo (${t2.ofe} vs ${t1.ofe})`);
+        if (t2.est > t1.est) strongAreas.push(`Estratégia (${t2.est} vs ${t1.est})`);
+        if (t2.sup > t1.sup) strongAreas.push(`Suporte (${t2.sup} vs ${t1.sup})`);
+        verdictTitle = `⚡ Favoritismo para ${s2.ownerName} (${prob2}%)`;
+        verdictLog = `${s2.ownerName} assume o favoritismo com Overall ${t2.ovr} contra ${t1.ovr} de ${s1.ownerName}${strongAreas.length ? `, dominando em ${strongAreas.join(' e ')}` : ''}.`;
+      }
+
+      return { t1, t2, prob1, prob2, verdictTitle, verdictLog };
+    }
+
+    function preparePreBattle() {
+      const s1 = state.squads[1];
+      const s2 = state.squads[2];
+      const isP2AI = (state.mode === 'SOLO' || state.mode === 'CODE_CHALLENGE');
+      const analysis = analyzeMatchup(s1, s2);
+
+      state.preBattle = {
+        p1Ready: false,
+        p2Ready: isP2AI, // IA is automatically ready!
+        isP2AI,
+        analysis
+      };
+      state.screen = 'PRE_BATTLE';
+      render();
+    }
+
+    function togglePlayerReady(playerNum) {
+      if (!state.preBattle) return;
+      if (playerNum === 1) {
+        state.preBattle.p1Ready = !state.preBattle.p1Ready;
+      } else if (playerNum === 2 && !state.preBattle.isP2AI) {
+        state.preBattle.p2Ready = !state.preBattle.p2Ready;
+      }
+
+      if (state.preBattle.p1Ready && state.preBattle.p2Ready) {
+        showToast('Ambos os lados prontos! Iniciando Duelo...', 'success');
+        setTimeout(() => {
+          if (state.screen === 'PRE_BATTLE' && state.preBattle?.p1Ready && state.preBattle?.p2Ready) {
+            startBattleFromPreBattle();
+          }
+        }, 550);
+      }
+      render();
+    }
+
+    function renderPreBattle() {
+      const s1 = state.squads[1];
+      const s2 = state.squads[2];
+      const pb = state.preBattle;
+      const { t1, t2, prob1, prob2, verdictTitle, verdictLog } = pb.analysis;
+      const code1 = encodeSquadCode(s1);
+
+      return `
+        <div class="space-y-6 animate-enter">
+          <!-- Pre-Duel Analytics & Probability Bar -->
+          <div class="rounded-3xl bg-surface border border-slate-800 p-5 sm:p-7 space-y-5 shadow-2xl">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <span class="px-2.5 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-extrabold uppercase">
+                  Sala de Pré-Duelo
+                </span>
+                <h2 class="font-display text-xl sm:text-3xl font-black text-white mt-1">
+                  ${s1.ownerName} <span class="text-slate-500">VS</span> ${s2.ownerName}
+                </h2>
+              </div>
+              <button onclick="openShareLinkModal(buildShareableGameURL({ challenge: '${code1}' }), 'Código do Seu Esquadrão (MRV2)', '${code1}')"
+                class="px-3.5 py-2 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 text-xs font-bold text-sky-200">
+                📤 Compartilhar Meu Time
+              </button>
+            </div>
+
+            <!-- Probability Bar -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-xs sm:text-sm font-display font-black">
+                <span class="text-purple-300">${s1.ownerName} • ${prob1}%</span>
+                <span class="text-amber-300">${prob2}% • ${s2.ownerName}</span>
+              </div>
+              <div class="w-full h-5 rounded-full bg-slate-950 border border-slate-700 overflow-hidden flex p-0.5">
+                <div style="width: ${prob1}%" class="h-full rounded-l-full bg-gradient-to-r from-purple-600 to-sky-500 transition-all duration-700"></div>
+                <div style="width: ${prob2}%" class="h-full rounded-r-full bg-gradient-to-r from-amber-500 to-rose-600 transition-all duration-700"></div>
+              </div>
+            </div>
+
+            <!-- Analytical Log Box -->
+            <div class="rounded-2xl bg-slate-950/90 border border-slate-800 p-4 space-y-1.5">
+              <div class="font-display text-sm sm:text-base font-bold text-white">${verdictTitle}</div>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">${verdictLog}</p>
+            </div>
+
+            <!-- Ready Buttons for Both Sides -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              <!-- Player 1 Ready Control -->
+              <div class="rounded-2xl border ${pb.p1Ready ? 'border-emerald-500/60 bg-emerald-950/25' : 'border-slate-700 bg-slate-950/70'} p-4 flex items-center justify-between gap-3">
+                <div>
+                  <div class="text-[11px] font-bold text-slate-400 uppercase">Lado 1 • ${s1.ownerName}</div>
+                  <div class="text-xs font-bold ${pb.p1Ready ? 'text-emerald-300' : 'text-amber-300'} mt-0.5">
+                    ${pb.p1Ready ? '✅ Pronto para o Duelo!' : '⏳ Aguardando confirmação...'}
+                  </div>
+                </div>
+                <button onclick="togglePlayerReady(1)"
+                  class="px-5 py-2.5 rounded-xl font-display font-bold text-xs transition shadow-lg ${pb.p1Ready ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-purple-600 hover:bg-purple-500 text-white'}">
+                  ${pb.p1Ready ? '✓ Pronto' : 'Marcar Pronto'}
+                </button>
+              </div>
+
+              <!-- Player 2 / AI Ready Control -->
+              <div class="rounded-2xl border ${pb.p2Ready ? 'border-emerald-500/60 bg-emerald-950/25' : 'border-slate-700 bg-slate-950/70'} p-4 flex items-center justify-between gap-3">
+                <div>
+                  <div class="text-[11px] font-bold text-slate-400 uppercase">Lado 2 • ${s2.ownerName}</div>
+                  <div class="text-xs font-bold ${pb.p2Ready ? 'text-emerald-300' : 'text-amber-300'} mt-0.5">
+                    ${pb.isP2AI ? '🤖 IA Pronta Automaticamente' : (pb.p2Ready ? '✅ Pronto para o Duelo!' : '⏳ Aguardando confirmação...')}
+                  </div>
+                </div>
+                ${pb.isP2AI ? `
+                  <span class="px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-xs font-extrabold text-emerald-300">
+                    ✓ IA Pronta
+                  </span>
+                ` : `
+                  <button onclick="togglePlayerReady(2)"
+                    class="px-5 py-2.5 rounded-xl font-display font-bold text-xs transition shadow-lg ${pb.p2Ready ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-amber-600 hover:bg-amber-500 text-white'}">
+                    ${pb.p2Ready ? '✓ Pronto' : 'Marcar Pronto'}
+                  </button>
+                `}
+              </div>
+            </div>
+
+            ${(pb.p1Ready && pb.p2Ready) ? `
+              <div class="pt-2">
+                <button onclick="startBattleFromPreBattle()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 font-display font-black text-base text-white shadow-2xl">
+                  ⚔️ INICIAR BATALHA AGORA
+                </button>
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Both Assembled Squads Side-by-Side (Square Profile Cards) -->
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <!-- Squad 1 -->
+            <div class="rounded-3xl bg-surface border border-purple-500/30 p-5 space-y-4 shadow-xl">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div>
+                  <h3 class="font-display text-base sm:text-lg font-bold text-white">${s1.ownerName}</h3>
+                  <span class="text-xs text-slate-400">Formação ${s1.formationKey} • OVR Total: <strong class="text-amber-300">${t1.ovr}</strong></span>
+                </div>
+                <div class="flex gap-1.5 text-[11px] font-bold">
+                  <span class="px-2 py-1 rounded-lg bg-rose-500/15 text-rose-300">OFE ${t1.ofe}</span>
+                  <span class="px-2 py-1 rounded-lg bg-sky-500/15 text-sky-300">EST ${t1.est}</span>
+                  <span class="px-2 py-1 rounded-lg bg-emerald-500/15 text-emerald-300">SUP ${t1.sup}</span>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                ${s1.slots.map((sl, i) => renderSquareSquadCard(sl, i, false)).join('')}
+              </div>
+            </div>
+
+            <!-- Squad 2 -->
+            <div class="rounded-3xl bg-surface border border-amber-500/30 p-5 space-y-4 shadow-xl">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div>
+                  <h3 class="font-display text-base sm:text-lg font-bold text-white">${s2.ownerName}</h3>
+                  <span class="text-xs text-slate-400">Formação ${s2.formationKey} • OVR Total: <strong class="text-amber-300">${t2.ovr}</strong></span>
+                </div>
+                <div class="flex gap-1.5 text-[11px] font-bold">
+                  <span class="px-2 py-1 rounded-lg bg-rose-500/15 text-rose-300">OFE ${t2.ofe}</span>
+                  <span class="px-2 py-1 rounded-lg bg-sky-500/15 text-sky-300">EST ${t2.est}</span>
+                  <span class="px-2 py-1 rounded-lg bg-emerald-500/15 text-emerald-300">SUP ${t2.sup}</span>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                ${s2.slots.map((sl, i) => renderSquareSquadCard(sl, i, false)).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 10. 4-ACT BATTLE ENGINE
+    // =========================================================================
+    function getTopContributorName(squad, attrKey) {
+      let bestName = squad.ownerName;
+      let bestVal = -1;
+      squad.slots.forEach(sl => {
+        if (sl.charId && CHAR_MAP[sl.charId]) {
+          const ch = CHAR_MAP[sl.charId];
+          const eff = computeSlotEffectiveStats(ch, sl.role);
+          if (eff[attrKey] > bestVal) {
+            bestVal = eff[attrKey];
+            bestName = ch.name;
+          }
+        }
+      });
+      return bestName;
+    }
+
+    function simulateFullBattleActs(s1, s2) {
+      const t1 = getSquadTotals(s1);
+      const t2 = getSquadTotals(s2);
+
+      const actsDef = [
+        { key: 'est', title: 'Ato I • Domínio Estratégico (EST)', pts: 2, v1: t1.est, v2: t2.est },
+        { key: 'sup', title: 'Ato II • Suporte & Controle (SUP)', pts: 2, v1: t1.sup, v2: t2.sup },
+        { key: 'ofe', title: 'Ato III • Impacto Ofensivo (OFE)', pts: 2, v1: t1.ofe, v2: t2.ofe },
+        { key: 'ovr', title: 'Ato IV • Clímax Overall Geral (OVR)', pts: 3, v1: t1.ovr, v2: t2.ovr }
+      ];
+
+      let score1 = 0;
+      let score2 = 0;
+      const acts = actsDef.map(a => {
+        const mvp1 = getTopContributorName(s1, a.key);
+        const mvp2 = getTopContributorName(s2, a.key);
+        let winner = 0;
+        let narrative = '';
+
+        if (a.v1 > a.v2) {
+          winner = 1;
+          score1 += a.pts;
+          narrative = `${mvp1} comandou a superioridade de ${s1.ownerName} (${a.v1} vs ${a.v2}), garantindo +${a.pts} pontos!`;
+        } else if (a.v2 > a.v1) {
+          winner = 2;
+          score2 += a.pts;
+          narrative = `${mvp2} desequilibrou a favor de ${s2.ownerName} (${a.v2} vs ${a.v1}), somando +${a.pts} pontos!`;
+        } else {
+          winner = 0;
+          score1 += a.pts / 2;
+          score2 += a.pts / 2;
+          narrative = `Empate técnico entre ${mvp1} e ${mvp2} (${a.v1} vs ${a.v2})! Cada lado recebe +${a.pts / 2} pts.`;
+        }
+
+        return { ...a, winner, narrative, mvp1, mvp2 };
+      });
+
+      if (score1 === score2) {
+        const tie1 = t1.ovr + t1.est;
+        const tie2 = t2.ovr + t2.est;
+        const winner = tie1 >= tie2 ? 1 : 2;
+        if (winner === 1) score1 += 1;
+        else score2 += 1;
+        acts.push({
+          key: 'sudden',
+          title: 'Ato Extra • Morte Súbita do Multiverso',
+          pts: 1,
+          v1: tie1,
+          v2: tie2,
+          winner,
+          narrative: `Após empate nos 4 atos, ${winner === 1 ? s1.ownerName : s2.ownerName} vence no critério de sinergia OVR+EST (+1 pt)!`
+        });
+      }
+
+      const is7a0Sweep = (score1 === 9 && score2 === 0) || (score2 === 9 && score1 === 0);
+      return {
+        acts,
+        score1,
+        score2,
+        winner: score1 > score2 ? 1 : 2,
+        is7a0Sweep
+      };
+    }
+
+    function startBattleFromPreBattle() {
+      const s1 = state.squads[1];
+      const s2 = state.squads[2];
+      const result = simulateFullBattleActs(s1, s2);
+      state.battle = {
+        ...result,
+        revealedCount: 1
+      };
+      state.screen = 'BATTLE';
+      render();
+    }
+
+    function revealNextBattleAct() {
+      if (!state.battle) return;
+      if (state.battle.revealedCount < state.battle.acts.length) {
+        state.battle.revealedCount++;
+        render();
+      }
+    }
+
+    function revealAllBattleActs() {
+      if (!state.battle) return;
+      state.battle.revealedCount = state.battle.acts.length;
+      render();
+    }
+
+    function renderBattle() {
+      const s1 = state.squads[1];
+      const s2 = state.squads[2];
+      const b = state.battle;
+      const shownActs = b.acts.slice(0, b.revealedCount);
+      const isFinished = b.revealedCount >= b.acts.length;
+
+      let cur1 = 0;
+      let cur2 = 0;
+      shownActs.forEach(a => {
+        if (a.winner === 1) cur1 += a.pts;
+        else if (a.winner === 2) cur2 += a.pts;
+        else { cur1 += a.pts / 2; cur2 += a.pts / 2; }
+      });
+
+      const winnerSquad = b.winner === 1 ? s1 : s2;
+      const code1 = encodeSquadCode(s1);
+      const t1 = getSquadTotals(s1);
+      const t2 = getSquadTotals(s2);
+
+      return `
+        <div class="space-y-6 animate-enter">
+          <!-- Scoreboard -->
+          <div class="rounded-3xl bg-gradient-to-r from-purple-950/80 via-surface to-amber-950/80 border border-slate-700 p-6 text-center space-y-3 shadow-2xl">
+            <div class="text-xs font-extrabold uppercase tracking-widest text-slate-400">Placar da Arena do Multiverso</div>
+            <div class="flex items-center justify-center gap-4 sm:gap-10">
+              <div class="text-right flex-1">
+                <div class="font-display text-sm sm:text-xl font-bold text-purple-300 truncate">${s1.ownerName}</div>
+                <div class="text-xs text-slate-400">Formação ${s1.formationKey}</div>
+              </div>
+              <div class="px-5 py-2.5 rounded-2xl bg-slate-950 border border-slate-700 font-display text-2xl sm:text-4xl font-black text-white">
+                ${cur1} <span class="text-slate-600 text-xl">x</span> ${cur2}
+              </div>
+              <div class="text-left flex-1">
+                <div class="font-display text-sm sm:text-xl font-bold text-amber-300 truncate">${s2.ownerName}</div>
+                <div class="text-xs text-slate-400">Formação ${s2.formationKey}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Revealed Acts -->
+          <div class="space-y-3">
+            ${shownActs.map(act => `
+              <div class="rounded-2xl bg-surface border ${act.winner === 1 ? 'border-purple-500/50' : (act.winner === 2 ? 'border-amber-500/50' : 'border-slate-700')} p-4 sm:p-5 space-y-2 animate-enter shadow-lg">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="font-display text-sm sm:text-base font-bold text-white">${act.title}</span>
+                  <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold ${act.winner === 1 ? 'bg-purple-500/20 text-purple-300' : (act.winner === 2 ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-800 text-slate-300')}">
+                    ${act.winner === 1 ? `${s1.ownerName} (+${act.pts} pts)` : (act.winner === 2 ? `${s2.ownerName} (+${act.pts} pts)` : 'Empate')}
+                  </span>
+                </div>
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                  <span>${s1.ownerName}: <strong class="text-white">${act.v1}</strong></span>
+                  <span>${s2.ownerName}: <strong class="text-white">${act.v2}</strong></span>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-200">${act.narrative}</p>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Controls or Final Winner Banner + Full Squads Showcase -->
+          ${!isFinished ? `
+            <div class="flex flex-wrap items-center justify-center gap-3">
+              <button onclick="revealNextBattleAct()" class="px-6 py-3.5 rounded-2xl bg-purple-600 hover:bg-purple-500 font-display font-bold text-sm text-white shadow-lg">
+                ▶️ Próximo Ato (${b.revealedCount}/${b.acts.length})
+              </button>
+              <button onclick="revealAllBattleActs()" class="px-5 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 border border-slate-700">
+                ⏩ Simular Todos os Atos
+              </button>
+            </div>
+          ` : `
+            <div class="space-y-6 animate-enter">
+              <div class="rounded-3xl bg-gradient-to-br from-emerald-950/90 via-surface to-purple-950/90 border-2 border-emerald-400/60 p-6 sm:p-8 text-center space-y-4 shadow-2xl">
+                ${b.is7a0Sweep ? `
+                  <div class="inline-block px-4 py-1 rounded-full bg-amber-500/25 border border-amber-400 text-amber-200 font-display font-black text-xs uppercase tracking-widest">
+                    🔥 MASSACRE HISTÓRICO • 7 A 0 NO MULTIVERSO! 🔥
+                  </div>
+                ` : ''}
+                <h3 class="font-display text-2xl sm:text-4xl font-black text-white">
+                  🏆 Vitória de <span class="text-emerald-300">${winnerSquad.ownerName}</span>!
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
+                  Placar final de <strong>${b.score1} a ${b.score2}</strong>. Confira abaixo o seu time completo e o esquadrão adversário!
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                  <button onclick="copyTextValue('${code1}', 'Código MRV2 do seu esquadrão copiado!')"
+                    class="px-5 py-3 rounded-2xl bg-sky-600 hover:bg-sky-500 font-display font-bold text-xs text-white">
+                    📋 Copiar Código do Meu Time
+                  </button>
+                  <button onclick="goHome()"
+                    class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 font-display font-bold text-xs text-white">
+                    🏠 Voltar ao Início
+                  </button>
+                </div>
+              </div>
+
+              <!-- Complete Squads Showcase on Victory / Defeat -->
+              <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <div class="rounded-3xl bg-surface border-2 ${b.winner === 1 ? 'border-emerald-500/60' : 'border-rose-500/40'} p-5 space-y-4 shadow-xl">
+                  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${b.winner === 1 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}">
+                        ${b.winner === 1 ? '🏆 Seu Time Campeão' : '💀 Seu Time Completo'}
+                      </span>
+                      <h4 class="font-display text-base sm:text-lg font-bold text-white mt-1">${s1.ownerName}</h4>
+                      <span class="text-xs text-slate-400">Formação ${s1.formationKey} • OVR Total: <strong class="text-amber-300">${t1.ovr}</strong></span>
+                    </div>
+                    <div class="flex gap-1.5 text-[11px] font-bold">
+                      <span class="px-2 py-1 rounded-lg bg-rose-500/15 text-rose-300">OFE ${t1.ofe}</span>
+                      <span class="px-2 py-1 rounded-lg bg-sky-500/15 text-sky-300">EST ${t1.est}</span>
+                      <span class="px-2 py-1 rounded-lg bg-emerald-500/15 text-emerald-300">SUP ${t1.sup}</span>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    ${s1.slots.map((sl, i) => renderSquareSquadCard(sl, i, false)).join('')}
+                  </div>
+                </div>
+
+                <div class="rounded-3xl bg-surface border-2 ${b.winner === 2 ? 'border-emerald-500/60' : 'border-slate-800'} p-5 space-y-4 shadow-xl">
+                  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${b.winner === 2 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'}">
+                        ${b.winner === 2 ? '🏆 Time Campeão' : 'Time Adversário'}
+                      </span>
+                      <h4 class="font-display text-base sm:text-lg font-bold text-white mt-1">${s2.ownerName}</h4>
+                      <span class="text-xs text-slate-400">Formação ${s2.formationKey} • OVR Total: <strong class="text-amber-300">${t2.ovr}</strong></span>
+                    </div>
+                    <div class="flex gap-1.5 text-[11px] font-bold">
+                      <span class="px-2 py-1 rounded-lg bg-rose-500/15 text-rose-300">OFE ${t2.ofe}</span>
+                      <span class="px-2 py-1 rounded-lg bg-sky-500/15 text-sky-300">EST ${t2.est}</span>
+                      <span class="px-2 py-1 rounded-lg bg-emerald-500/15 text-emerald-300">SUP ${t2.sup}</span>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    ${s2.slots.map((sl, i) => renderSquareSquadCard(sl, i, false)).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 11. TOURNAMENT MATA-MATA (LOBBY FORMATION + READY + SIMULTANEOUS DRAFTS)
+    // =========================================================================
+    function generateRoomCode() {
+      return 'SL-' + Math.floor(1000 + Math.random() * 9000);
+    }
+
+    async function syncTournamentRoomToCloud() {
+      if (!cloudOnline || !db || !state.tournament.roomCode) return;
+      try {
+        const ref = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', state.tournament.roomCode);
+        await setDoc(ref, {
+          size: state.tournament.size,
+          phase: state.tournament.phase,
+          participants: state.tournament.participants,
+          rounds: state.tournament.rounds,
+          champion: state.tournament.champion,
+          updatedAt: Date.now()
+        }, { merge: true });
+      } catch (e) {
+        console.warn('Room sync skipped:', e);
+      }
+    }
+
+    function checkAndAdvanceTournamentIfAllDrafted() {
+      const t = state.tournament;
+      if (t.phase !== 'SIMULTANEOUS_DRAFT') return;
+      const allCompleted = t.participants.length > 0 && t.participants.every(p => p.squad && getSquadTotals(p.squad).count === 7);
+      if (allCompleted) {
+        buildTournamentBracketFromParticipants();
+      }
+    }
+
+    function subscribeToTournamentRoom(roomCode) {
+      if (roomUnsubscribe) {
+        roomUnsubscribe();
+        roomUnsubscribe = null;
+      }
+      if (!cloudOnline || !db || !roomCode) return;
+      const ref = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', roomCode);
+      roomUnsubscribe = onSnapshot(ref, (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          const prevPhase = state.tournament.phase;
+          state.tournament.size = data.size || state.tournament.size;
+          state.tournament.phase = data.phase || state.tournament.phase;
+          state.tournament.participants = data.participants || state.tournament.participants;
+          state.tournament.rounds = data.rounds || state.tournament.rounds;
+          state.tournament.champion = data.champion || null;
+
+          // If host started simultaneous drafts, automatically launch draft for this player's claimed slot!
+          if (prevPhase === 'LOBBY' && state.tournament.phase === 'SIMULTANEOUS_DRAFT') {
+            const myLocalIdx = state.tournament.participants.findIndex(
+              p => p.occupantType === 'PLAYER' && p.playerId === localSessionId && getSquadTotals(p.squad).count < 7
+            );
+            if (myLocalIdx !== -1) {
+              startTournamentDraftForSlot(myLocalIdx);
+              return;
+            }
+          }
+
+          if (state.tournament.phase === 'SIMULTANEOUS_DRAFT') {
+            checkAndAdvanceTournamentIfAllDrafted();
+          }
+
+          if (state.screen === 'TOURNAMENT' || state.mode === 'TOURNAMENT_DRAFT') {
+            render();
+          }
+        }
+      });
+    }
+
+    async function createTournamentLobby(size = 8) {
+      const code = generateRoomCode();
+      const participants = Array.from({ length: size }, (_, i) => ({
+        occupantType: i === 0 ? 'PLAYER' : 'EMPTY', // Creator automatically claims Vaga #1
+        playerId: i === 0 ? localSessionId : null,
+        name: i === 0 ? (state.player1Name || 'Comandante #1') : `Vaga #${i + 1} (Aberta)`,
+        formationKey: '3-2-2',
+        ready: false,
+        squad: null,
+        draftProgress: 0,
+        isAI: false
+      }));
+
+      state.tournament = {
+        size,
+        roomCode: code,
+        isOnlineHost: true,
+        phase: 'LOBBY',
+        participants,
+        rounds: [],
+        champion: null,
+        mySlotIndex: 0,
+        targetSlotIndex: null
+      };
+      state.screen = 'TOURNAMENT';
+      await syncTournamentRoomToCloud();
+      subscribeToTournamentRoom(code);
+      render();
+    }
+
+    async function joinTournamentRoomByCode(code) {
+      if (!code) return;
+      if (cloudOnline && db) {
+        try {
+          const ref = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', code);
+          const snap = await getDoc(ref);
+          if (snap.exists()) {
+            const data = snap.data();
+            state.tournament = {
+              size: data.size || 8,
+              roomCode: code,
+              isOnlineHost: false,
+              phase: data.phase || 'LOBBY',
+              participants: data.participants || [],
+              rounds: data.rounds || [],
+              champion: data.champion || null,
+              mySlotIndex: null,
+              targetSlotIndex: null
+            };
+            state.screen = 'TOURNAMENT';
+            subscribeToTournamentRoom(code);
+            showToast(`Conectado à sala ${code}! Assuma uma vaga e escolha sua formação.`, 'success');
+            render();
+            return;
+          }
+        } catch (e) {
+          console.warn('Join room error:', e);
+        }
+      }
+      showToast(`Sala ${code} não encontrada online. Criando lobby local com esse código...`, 'warning');
+      createTournamentLobby(8);
+    }
+
+    function joinTournamentFromInput() {
+      const val = document.getElementById('join-room-code-input')?.value.trim().toUpperCase();
+      if (!val) {
+        showToast('Digite o código da sala (ex: SL-4821).', 'warning');
+        return;
+      }
+      joinTournamentRoomByCode(val);
+    }
+
+    function claimTournamentSlot(slotIdx) {
+      const p = state.tournament.participants[slotIdx];
+      if (!p || p.occupantType !== 'EMPTY') return;
+      const existingMine = state.tournament.participants.filter(x => x.occupantType === 'PLAYER' && x.playerId === localSessionId).length;
+      const defaultName = existingMine === 0 ? (state.player1Name || `Jogador #${slotIdx + 1}`) : `Amigo Local #${slotIdx + 1}`;
+      state.tournament.participants[slotIdx] = {
+        occupantType: 'PLAYER',
+        playerId: localSessionId,
+        name: defaultName,
+        formationKey: '3-2-2',
+        ready: false,
+        squad: null,
+        draftProgress: 0,
+        isAI: false
+      };
+      syncTournamentRoomToCloud();
+      render();
+    }
+
+    function leaveTournamentSlot(slotIdx) {
+      const p = state.tournament.participants[slotIdx];
+      if (!p) return;
+      state.tournament.participants[slotIdx] = {
+        occupantType: 'EMPTY',
+        playerId: null,
+        name: `Vaga #${slotIdx + 1} (Aberta)`,
+        formationKey: '3-2-2',
+        ready: false,
+        squad: null,
+        draftProgress: 0,
+        isAI: false
+      };
+      syncTournamentRoomToCloud();
+      render();
+    }
+
+    function updateTournamentSlotName(slotIdx, newName) {
+      const p = state.tournament.participants[slotIdx];
+      if (!p || p.occupantType !== 'PLAYER') return;
+      p.name = newName.trim() || `Jogador #${slotIdx + 1}`;
+      syncTournamentRoomToCloud();
+    }
+
+    function updateTournamentSlotFormation(slotIdx, newForm) {
+      const p = state.tournament.participants[slotIdx];
+      if (!p || p.occupantType !== 'PLAYER' || !FORMATIONS[newForm]) return;
+      p.formationKey = newForm;
+      syncTournamentRoomToCloud();
+      render();
+    }
+
+    function toggleTournamentSlotReady(slotIdx) {
+      const p = state.tournament.participants[slotIdx];
+      if (!p || p.occupantType !== 'PLAYER') return;
+      p.ready = !p.ready;
+      syncTournamentRoomToCloud();
+      render();
+    }
+
+    // FIX: Only fills slots where occupantType === 'EMPTY', NEVER overwriting PLAYER slots!
+    function fillEmptyTournamentSlotsWithAI() {
+      const aiNames = ['Thanos Titan', 'Stark Tech', 'Xavier Academy', 'Doom Latveria', 'Wakanda Guard', 'Asgard Sons', 'Sokovia Bots', 'Quantum Crew'];
+      const formKeys = Object.keys(FORMATIONS);
+      let addedBots = 0;
+
+      state.tournament.participants = state.tournament.participants.map((p, idx) => {
+        if (p.occupantType === 'PLAYER' || p.occupantType === 'BOT') {
+          return p; // Strictly preserve all human players and existing bots!
+        }
+        addedBots++;
+        const aiName = aiNames[idx % aiNames.length];
+        const aiForm = formKeys[idx % formKeys.length];
+        return {
+          occupantType: 'BOT',
+          playerId: null,
+          name: aiName,
+          formationKey: aiForm,
+          ready: true,
+          squad: null,
+          draftProgress: 0,
+          isAI: true
+        };
+      });
+
+      syncTournamentRoomToCloud();
+      if (addedBots > 0) {
+        showToast(`${addedBots} vaga(s) vazia(s) preenchida(s) com Bots! Seu lugar está preservado.`, 'success');
+      } else {
+        showToast('Todas as vagas já estão ocupadas!', 'info');
+      }
+      render();
+    }
+
+    function openSlotCodeModal(slotIdx) {
+      state.tournament.targetSlotIndex = slotIdx;
+      const modal = document.getElementById('slot-code-modal');
+      const input = document.getElementById('tournament-code-input');
+      if (input) input.value = '';
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeSlotCodeModal() {
+      const modal = document.getElementById('slot-code-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function confirmAddCodeToTournament() {
+      const raw = document.getElementById('tournament-code-input')?.value || '';
+      const decoded = decodeSquadCode(raw);
+      if (!decoded) {
+        showToast('Código inválido! Use um código MRV2-...', 'error');
+        return;
+      }
+      const idx = state.tournament.targetSlotIndex;
+      if (idx !== null && state.tournament.participants[idx]) {
+        state.tournament.participants[idx] = {
+          occupantType: 'PLAYER',
+          playerId: 'CODE-' + idx,
+          name: decoded.ownerName,
+          formationKey: decoded.formationKey,
+          ready: true,
+          squad: decoded,
+          draftProgress: 7,
+          isAI: false
+        };
+        syncTournamentRoomToCloud();
+      }
+      closeSlotCodeModal();
+      showToast(`${decoded.ownerName} adicionado ao Mata-Mata!`, 'success');
+      render();
+    }
+
+    function startTournamentDraftForSlot(slotIdx) {
+      const p = state.tournament.participants[slotIdx];
+      if (!p) return;
+      state.mode = 'TOURNAMENT_DRAFT';
+      state.tournament.targetSlotIndex = slotIdx;
+      state.activeDraftPlayer = 1;
+      state.squads[1] = createEmptySquad(p.name, p.formationKey || '3-2-2');
+      initDraftState();
+      state.screen = 'DRAFT';
+      render();
+    }
+
+    async function launchSimultaneousTournamentDrafts() {
+      const players = state.tournament.participants.filter(p => p.occupantType === 'PLAYER');
+      if (players.length === 0) {
+        showToast('Assuma pelo menos 1 vaga no lobby antes de iniciar!', 'warning');
+        return;
+      }
+      if (!players.every(p => p.ready)) {
+        showToast('Todos os jogadores na sala precisam clicar em "Pronto" antes de começar!', 'warning');
+        return;
+      }
+
+      // Automatically fill any remaining EMPTY slots with Bots without touching PLAYER slots
+      fillEmptyTournamentSlotsWithAI();
+
+      // Generate squads for all BOT slots right away
+      state.tournament.participants = state.tournament.participants.map(p => {
+        if (p.occupantType === 'BOT') {
+          const aiSquad = generateAISquad(p.name, 'CLASSIC');
+          aiSquad.formationKey = p.formationKey || aiSquad.formationKey;
+          return {
+            ...p,
+            squad: aiSquad,
+            draftProgress: 7,
+            isAI: true
+          };
+        }
+        return {
+          ...p,
+          draftProgress: p.squad && getSquadTotals(p.squad).count === 7 ? 7 : 0
+        };
+      });
+
+      state.tournament.phase = 'SIMULTANEOUS_DRAFT';
+      await syncTournamentRoomToCloud();
+
+      // Launch draft for the local player's first pending slot
+      const mySlotIdx = state.tournament.participants.findIndex(
+        p => p.occupantType === 'PLAYER' && p.playerId === localSessionId && getSquadTotals(p.squad).count < 7
+      );
+
+      if (mySlotIdx !== -1) {
+        startTournamentDraftForSlot(mySlotIdx);
+      } else {
+        checkAndAdvanceTournamentIfAllDrafted();
+        render();
+      }
+    }
+
+    function buildTournamentBracketFromParticipants() {
+      const parts = state.tournament.participants;
+      const matches = [];
+      for (let i = 0; i < parts.length; i += 2) {
+        matches.push({
+          id: `R0-M${i / 2}`,
+          p1: parts[i],
+          p2: parts[i + 1],
+          winner: null,
+          scoreText: ''
+        });
+      }
+      state.tournament.rounds = [matches];
+      state.tournament.phase = 'BRACKET';
+      syncTournamentRoomToCloud();
+    }
+
+    function simulateTournamentMatch(roundIdx, matchIdx) {
+      const match = state.tournament.rounds[roundIdx]?.[matchIdx];
+      if (!match || match.winner || !match.p1?.squad || !match.p2?.squad) return;
+
+      const res = simulateFullBattleActs(match.p1.squad, match.p2.squad);
+      match.winner = res.winner === 1 ? match.p1 : match.p2;
+      match.scoreText = `${res.score1} x ${res.score2}`;
+
+      const curRound = state.tournament.rounds[roundIdx];
+      if (curRound.every(m => !!m.winner)) {
+        if (curRound.length === 1) {
+          state.tournament.champion = curRound[0].winner;
+        } else {
+          const nextMatches = [];
+          for (let i = 0; i < curRound.length; i += 2) {
+            nextMatches.push({
+              id: `R${roundIdx + 1}-M${i / 2}`,
+              p1: curRound[i].winner,
+              p2: curRound[i + 1].winner,
+              winner: null,
+              scoreText: ''
+            });
+          }
+          state.tournament.rounds.push(nextMatches);
+        }
+      }
+
+      syncTournamentRoomToCloud();
+      render();
+    }
+
+    function renderTournament() {
+      const t = state.tournament;
+      const shareUrl = buildShareableGameURL({ room: t.roomCode });
+
+      if (t.phase === 'LOBBY') {
+        const players = t.participants.filter(p => p.occupantType === 'PLAYER');
+        const allPlayersReady = players.length > 0 && players.every(p => p.ready);
+
+        return `
+          <div class="space-y-6 animate-enter">
+            <div class="rounded-3xl bg-surface border border-emerald-500/40 p-6 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-extrabold">Sala ${t.roomCode}</span>
+                  <span class="text-xs text-slate-400">${players.length} Player(s) na Sala</span>
+                </div>
+                <h2 class="font-display text-xl sm:text-2xl font-black text-white mt-1">Lobby do Mata-Mata (${t.size} Times)</h2>
+                <p class="text-xs text-slate-400">Escolha sua formação e clique em <strong>Pronto</strong>. Quando todos estiverem prontos, os drafts começam simultaneamente!</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="openShareLinkModal('${shareUrl}', 'Código da Sala Mata-Mata', '${t.roomCode}')"
+                  class="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white">
+                  🔗 Convidar Amigos
+                </button>
+                <button onclick="fillEmptyTournamentSlotsWithAI()"
+                  class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-amber-300 border border-slate-700">
+                  🤖 Completar Vagas Vazias c/ Bots
+                </button>
+                <button onclick="launchSimultaneousTournamentDrafts()" ${!allPlayersReady ? 'disabled' : ''}
+                  class="px-5 py-2.5 rounded-xl font-display font-bold text-xs transition shadow-lg ${allPlayersReady ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}">
+                  🚀 Iniciar Drafts Simultâneos
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              ${t.participants.map((p, idx) => {
+                const isMine = p.occupantType === 'PLAYER' && p.playerId === localSessionId;
+                return `
+                  <div class="rounded-2xl bg-surface border-2 ${p.occupantType === 'PLAYER' ? (p.ready ? 'border-emerald-500/60' : 'border-purple-500/60') : (p.occupantType === 'BOT' ? 'border-amber-500/40' : 'border-slate-800')} p-4 space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-bold text-slate-400">Vaga #${idx + 1}</span>
+                      ${p.occupantType === 'PLAYER' ? `
+                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold ${p.ready ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">
+                          ${p.ready ? '✅ Pronto' : '⏳ Escolhendo'}
+                        </span>
+                      ` : (p.occupantType === 'BOT' ? `
+                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-bold">🤖 Bot Pronto</span>
+                      ` : '')}
+                    </div>
+
+                    ${p.occupantType === 'EMPTY' ? `
+                      <div class="font-display text-sm font-bold text-slate-400">Vaga Aberta</div>
+                      <div class="flex gap-2 pt-1">
+                        <button onclick="claimTournamentSlot(${idx})" class="flex-1 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-[11px] font-bold text-white">
+                          🙋 Assumir Vaga
+                        </button>
+                        <button onclick="openSlotCodeModal(${idx})" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-sky-300">
+                          Colar MRV2
+                        </button>
+                      </div>
+                    ` : ''}
+
+                    ${p.occupantType === 'PLAYER' ? `
+                      <div class="space-y-2">
+                        ${isMine ? `
+                          <input type="text" value="${p.name}" onchange="updateTournamentSlotName(${idx}, this.value)"
+                            class="w-full px-2.5 py-1.5 rounded-xl bg-slate-950 border border-slate-700 text-xs font-bold text-white" />
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Formação Tática</label>
+                            <select onchange="updateTournamentSlotFormation(${idx}, this.value)"
+                              class="w-full px-2.5 py-1.5 rounded-xl bg-slate-950 border border-slate-700 text-xs font-semibold text-white">
+                              <option value="3-2-2" ${p.formationKey === '3-2-2' ? 'selected' : ''}>3-2-2 (Agressiva)</option>
+                              <option value="2-3-2" ${p.formationKey === '2-3-2' ? 'selected' : ''}>2-3-2 (Mente Mestra)</option>
+                              <option value="2-2-3" ${p.formationKey === '2-2-3' ? 'selected' : ''}>2-2-3 (Fortaleza)</option>
+                            </select>
+                          </div>
+                          <div class="flex gap-2 pt-1">
+                            <button onclick="toggleTournamentSlotReady(${idx})"
+                              class="flex-1 py-2 rounded-xl font-display font-bold text-[11px] text-white ${p.ready ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-purple-600 hover:bg-purple-500'}">
+                              ${p.ready ? '✓ Pronto' : 'Marcar Pronto'}
+                            </button>
+                            <button onclick="leaveTournamentSlot(${idx})"
+                              class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300">
+                              Sair
+                            </button>
+                          </div>
+                        ` : `
+                          <div class="font-display text-sm font-bold text-white truncate">${p.name}</div>
+                          <div class="text-xs text-slate-400">Formação: <strong class="text-white">${p.formationKey}</strong></div>
+                        `}
+                      </div>
+                    ` : ''}
+
+                    ${p.occupantType === 'BOT' ? `
+                      <div class="font-display text-sm font-bold text-white truncate">${p.name}</div>
+                      <div class="flex items-center justify-between text-xs text-slate-400">
+                        <span>Formação ${p.formationKey}</span>
+                        <button onclick="leaveTournamentSlot(${idx})" class="text-[11px] text-rose-400 hover:underline">Remover Bot</button>
+                      </div>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      if (t.phase === 'SIMULTANEOUS_DRAFT') {
+        const myPendingIdx = t.participants.findIndex(
+          p => p.occupantType === 'PLAYER' && p.playerId === localSessionId && getSquadTotals(p.squad).count < 7
+        );
+
+        return `
+          <div class="space-y-6 animate-enter">
+            <div class="rounded-3xl bg-surface border border-purple-500/40 p-6 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+              <div>
+                <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 text-xs font-extrabold">Sala ${t.roomCode} • Drafts Simultâneos</span>
+                <h2 class="font-display text-xl sm:text-2xl font-black text-white mt-1">Aguardando Conclusão dos Esquadrões</h2>
+                <p class="text-xs text-slate-400">Assim que todos os jogadores concluírem os 7 picks, o chaveamento abre automaticamente!</p>
+              </div>
+              ${myPendingIdx !== -1 ? `
+                <button onclick="startTournamentDraftForSlot(${myPendingIdx})"
+                  class="px-5 py-3 rounded-2xl bg-purple-600 hover:bg-purple-500 font-display font-bold text-xs text-white shadow-lg">
+                  ▶️ Continuar Meu Draft
+                </button>
+              ` : ''}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              ${t.participants.map((p, idx) => {
+                const count = p.squad ? getSquadTotals(p.squad).count : (p.draftProgress || 0);
+                const done = count >= 7;
+                return `
+                  <div class="rounded-2xl bg-surface border ${done ? 'border-emerald-500/50' : 'border-amber-500/50'} p-4 space-y-2">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-bold text-slate-400">Vaga #${idx + 1}</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold ${done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">
+                        ${done ? '✅ 7/7 Pronto' : `⏳ ${count}/7 Draftando`}
+                      </span>
+                    </div>
+                    <div class="font-display text-sm font-bold text-white truncate">${p.name}</div>
+                    <div class="text-xs text-slate-400">Formação ${p.formationKey}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // BRACKET PHASE
+      return `
+        <div class="space-y-6 animate-enter">
+          <div class="rounded-3xl bg-surface border border-slate-800 p-5 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-extrabold">Sala ${t.roomCode} • Chaveamento</span>
+              <h2 class="font-display text-xl sm:text-2xl font-black text-white mt-1">Copa Mata-Mata do Multiverso</h2>
+            </div>
+            <button onclick="goHome()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white">Voltar ao Início</button>
+          </div>
+
+          ${t.champion ? `
+            <div class="rounded-3xl bg-gradient-to-r from-amber-950/90 via-surface to-emerald-950/90 border-2 border-amber-400 p-6 text-center space-y-2 shadow-2xl">
+              <div class="text-xs font-extrabold uppercase tracking-widest text-amber-300">👑 Grande Campeão do Torneio 👑</div>
+              <h3 class="font-display text-2xl sm:text-4xl font-black text-white">${t.champion.name}</h3>
+            </div>
+          ` : ''}
+
+          <div class="grid grid-cols-1 md:grid-cols-${t.rounds.length} gap-5">
+            ${t.rounds.map((roundMatches, rIdx) => `
+              <div class="space-y-3">
+                <div class="text-xs font-display font-bold uppercase text-slate-400 text-center">
+                  ${roundMatches.length === 1 ? 'Grande Final' : (roundMatches.length === 2 ? 'Semifinais' : `Rodada ${rIdx + 1}`)}
+                </div>
+                ${roundMatches.map((m, mIdx) => `
+                  <div class="rounded-2xl bg-surface border border-slate-800 p-4 space-y-2.5 shadow-lg">
+                    <div class="flex items-center justify-between text-xs ${m.winner?.name === m.p1.name ? 'text-emerald-300 font-extrabold' : 'text-slate-300'}">
+                      <span class="truncate">${m.p1.name}</span>
+                      <span>OVR ${getSquadTotals(m.p1.squad).ovr}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-xs ${m.winner?.name === m.p2.name ? 'text-emerald-300 font-extrabold' : 'text-slate-300'}">
+                      <span class="truncate">${m.p2.name}</span>
+                      <span>OVR ${getSquadTotals(m.p2.squad).ovr}</span>
+                    </div>
+                    ${m.winner ? `
+                      <div class="pt-1 border-t border-slate-800 flex items-center justify-between text-[11px] font-bold text-amber-300">
+                        <span>Vencedor: ${m.winner.name}</span>
+                        <span>${m.scoreText}</span>
+                      </div>
+                    ` : `
+                      <button onclick="simulateTournamentMatch(${rIdx}, ${mIdx})" class="w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">
+                        ⚔️ Simular Confronto
+                      </button>
+                    `}
+                  </div>
+                `).join('')}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 12. MODALS: RULES, CATALOG & DEV IMAGES MANAGER
+    // =========================================================================
+    function openRulesModal() {
+      document.getElementById('rules-modal')?.classList.remove('hidden');
+    }
+    function closeRulesModal() {
+      document.getElementById('rules-modal')?.classList.add('hidden');
+    }
+
+    function openCatalogModal() {
+      document.getElementById('catalog-modal')?.classList.remove('hidden');
+      renderCatalog(currentCatalogEra);
+    }
+    function closeCatalogModal() {
+      document.getElementById('catalog-modal')?.classList.add('hidden');
+    }
+
+    function renderCatalog(eraFilter = 'ALL') {
+      currentCatalogEra = eraFilter;
+      const grid = document.getElementById('catalog-grid');
+      if (!grid) return;
+      const query = (document.getElementById('catalog-search')?.value || '').toLowerCase().trim();
+
+      const list = CHARACTERS.filter(c => {
+        const matchEra = eraFilter === 'ALL' || c.era === eraFilter;
+        const matchText = !query || c.name.toLowerCase().includes(query) || c.feat.toLowerCase().includes(query);
+        return matchEra && matchText;
+      });
+
+      grid.innerHTML = list.map(ch => renderDraftOptionCard(ch, false)).join('');
+    }
+
+    function openDevModal() {
+      devResetArmed = false;
+      devSwapSourceId = null;
+      document.getElementById('dev-modal')?.classList.remove('hidden');
+      renderDevList();
+    }
+    function closeDevModal() {
+      document.getElementById('dev-modal')?.classList.add('hidden');
+    }
+
+    function renderDevList() {
+      const container = document.getElementById('dev-list');
+      if (!container) return;
+      const eraVal = document.getElementById('dev-era-filter')?.value || 'ALL';
+      const searchVal = (document.getElementById('dev-search')?.value || '').toLowerCase().trim();
+
+      const filtered = CHARACTERS.filter(c => {
+        const okEra = eraVal === 'ALL' || c.era === eraVal;
+        const okName = !searchVal || c.name.toLowerCase().includes(searchVal);
+        return okEra && okName;
+      });
+
+      container.innerHTML = filtered.map(c => {
+        const curImg = getEffectiveCharImage(c);
+        const isSwapSrc = devSwapSourceId === c.id;
+        return `
+          <div class="rounded-2xl bg-slate-950 border ${isSwapSrc ? 'border-amber-400' : 'border-slate-800'} p-3 flex items-center gap-3">
+            <img src="${curImg}" alt="${c.name}" class="w-14 h-14 rounded-xl object-cover bg-slate-900 shrink-0"
+              onerror="this.src='https://placehold.co/100x100/1e293b/94a3b8?text=${c.mono}'" />
+            <div class="flex-1 min-w-0 space-y-1.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-white truncate">${c.name}</span>
+                <span class="text-[10px] text-slate-400 shrink-0">${ERAS[c.era].icon} ${c.id}</span>
+              </div>
+              <div class="flex gap-1.5">
+                <input id="dev-url-${c.id}" type="text" value="${curImg}"
+                  class="flex-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-[11px] text-slate-200" />
+                <button onclick="saveDevImage('${c.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[11px] font-bold text-white">Salvar</button>
+                <button onclick="swapDevCharacter('${c.id}')" class="px-2 py-1 rounded-lg ${isSwapSrc ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300'} text-[11px] font-bold" title="Trocar foto com outro card">⇄</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function saveDevImage(id) {
+      const val = document.getElementById(`dev-url-${id}`)?.value.trim();
+      if (!val) return;
+      customImages[id] = val;
+      saveDevImagesToCloud();
+      renderDevList();
+      render();
+      showToast(`Imagem de ${CHAR_MAP[id]?.name || id} atualizada!`, 'success');
+    }
+
+    function swapDevCharacter(id) {
+      if (!devSwapSourceId) {
+        devSwapSourceId = id;
+        renderDevList();
+        showToast('Selecione o segundo card para trocar as imagens entre eles.', 'info');
+        return;
+      }
+      if (devSwapSourceId === id) {
+        devSwapSourceId = null;
+        renderDevList();
+        return;
+      }
+      const imgA = getEffectiveCharImage(CHAR_MAP[devSwapSourceId]);
+      const imgB = getEffectiveCharImage(CHAR_MAP[id]);
+      customImages[devSwapSourceId] = imgB;
+      customImages[id] = imgA;
+      devSwapSourceId = null;
+      saveDevImagesToCloud();
+      renderDevList();
+      render();
+      showToast('Imagens trocadas entre os dois cards!', 'success');
+    }
+
+    function resetAllDevImages() {
+      const btn = document.getElementById('btn-reset-all-dev');
+      if (!devResetArmed) {
+        devResetArmed = true;
+        if (btn) btn.textContent = '⚠️ Confirmar Reset?';
+        setTimeout(() => {
+          devResetArmed = false;
+          if (btn) btn.textContent = '♻️ Restaurar Todas';
+        }, 3500);
+        return;
+      }
+      customImages = {};
+      localStorage.removeItem('mrv_7a0_custom_imgs_v1');
+      saveDevImagesToCloud();
+      devResetArmed = false;
+      if (btn) btn.textContent = '♻️ Restaurar Todas';
+      renderDevList();
+      render();
+      showToast('Todas as imagens padrão foram restauradas!', 'info');
+    }
+
+    function exportDevJSON() {
+      const map = {};
+      CHARACTERS.forEach(c => { map[c.id] = getEffectiveCharImage(c); });
+      copyTextValue(JSON.stringify(map, null, 2), 'JSON de todas as 51 imagens copiado!');
+    }
+
+    function toggleImportJSONBox() {
+      document.getElementById('dev-json-drawer')?.classList.toggle('hidden');
+    }
+
+    function applyImportedDevJSON() {
+      try {
+        const raw = document.getElementById('dev-json-input')?.value || '{}';
+        const parsed = JSON.parse(raw);
+        let applied = 0;
+        Object.entries(parsed).forEach(([id, url]) => {
+          if (CHAR_MAP[id] && typeof url === 'string' && url.trim()) {
+            customImages[id] = url.trim();
+            applied++;
+          }
+        });
+        saveDevImagesToCloud();
+        renderDevList();
+        render();
+        showToast(`${applied} imagens importadas com sucesso!`, 'success');
+      } catch (e) {
+        showToast('JSON inválido! Verifique a formatação.', 'error');
+      }
+    }
+
+    function downloadStandaloneHTMLWithPhotos() {
+      try {
+        let htmlDoc = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        CHARACTERS.forEach(c => {
+          const eff = getEffectiveCharImage(c);
+          if (eff && eff !== c.imgUrl) {
+            htmlDoc = htmlDoc.replace(`imgUrl: '${c.imgUrl}'`, `imgUrl: '${eff}'`);
+          }
+        });
+        const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'index.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Arquivo index.html baixado com todas as 51 fotos!', 'success');
+      } catch (e) {
+        showToast('Erro ao gerar o download do arquivo HTML.', 'error');
+      }
+    }
+
+    // =========================================================================
+    // 13. MAIN RENDER ROUTER & GLOBAL WINDOW BINDINGS
+    // =========================================================================
+    function render() {
+      const app = document.getElementById('app');
+      if (!app) return;
+      updatePhotoCountPill();
+
+      if (state.screen === 'HOME') app.innerHTML = renderHome();
+      else if (state.screen === 'DRAFT') app.innerHTML = renderDraft();
+      else if (state.screen === 'PRE_BATTLE') app.innerHTML = renderPreBattle();
+      else if (state.screen === 'BATTLE') app.innerHTML = renderBattle();
+      else if (state.screen === 'TOURNAMENT') app.innerHTML = renderTournament();
+    }
+
+    Object.assign(window, {
+      goHome,
+      openShareLinkModal,
+      closeShareLinkModal,
+      updateCustomSiteBaseUrl,
+      copyTextFromInput,
+      copyTextValue,
+      buildShareableGameURL,
+      openRulesModal,
+      closeRulesModal,
+      openCatalogModal,
+      closeCatalogModal,
+      renderCatalog,
+      openDevModal,
+      closeDevModal,
+      renderDevList,
+      saveDevImage,
+      swapDevCharacter,
+      resetAllDevImages,
+      exportDevJSON,
+      toggleImportJSONBox,
+      applyImportedDevJSON,
+      downloadStandaloneHTMLWithPhotos,
+      openSlotCodeModal,
+      closeSlotCodeModal,
+      confirmAddCodeToTournament,
+      clearChallenge,
+      startSoloDraft,
+      startPassPlayDraft,
+      startCodeChallengeFromInput,
+      spinEraRoulette,
+      selectDraftCard,
+      assignSelectedCardToSlot,
+      togglePlayerReady,
+      startBattleFromPreBattle,
+      revealNextBattleAct,
+      revealAllBattleActs,
+      createTournamentLobby,
+      joinTournamentFromInput,
+      claimTournamentSlot,
+      leaveTournamentSlot,
+      updateTournamentSlotName,
+      updateTournamentSlotFormation,
+      toggleTournamentSlotReady,
+      launchSimultaneousTournamentDrafts,
+      startTournamentDraftForSlot,
+      fillEmptyTournamentSlotsWithAI,
+      startTournamentBracket: launchSimultaneousTournamentDrafts,
+      simulateTournamentMatch,
+      toggleExclusivePlayerCards,
+      showLockedCardToast,
+      dealDraftOptionsForEra,
+      render
+    });
+
+    // Boot application
+    initCloud();
+  </script>
+</body>
+</html>
