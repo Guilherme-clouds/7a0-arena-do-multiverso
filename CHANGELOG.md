@@ -2,6 +2,13 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.3.1] - 2026-11-27
+
+### Corrigido
+- Arte em pixel art aparece mais para cima nos cards quadrados do time, fora da área dos textos.
+- A citação de feito do personagem aparece só uma vez por duelo, sem repetir em todos os atos.
+- "diferença de só X pontos" só usa "só" quando a diferença é pequena.
+
 ## [1.3.0] - 2026-11-27
 
 ### Adicionado
