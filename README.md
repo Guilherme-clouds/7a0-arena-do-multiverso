@@ -39,7 +39,7 @@ Para chamar amigos, use o botão **🔗 Convidar Amigos** no topo do jogo — el
 
 ## 🗂️ Catálogo
 
-Os cards usam artes padrão geradas pelo próprio jogo (sem fotos externas). Cada jogador pode colocar imagens próprias em **⚙️ Dev / Imagens** — elas ficam salvas só no navegador dele.
+Os cards usam artes originais em **pixel art** geradas pelo próprio jogo (`assets/js/pixel-art.js`): cada personagem tem um símbolo genérico ligado ao seu estilo (raio, martelo, chama, ímã...), sem logos ou fotos oficiais. Cada jogador pode colocar imagens próprias em **⚙️ Dev / Imagens** — elas ficam salvas só no navegador dele.
 
 51 cards de 5 obras: *Vingadores: Guerra Infinita*, *Vingadores: Ultimato*, *Vingadores: Era de Ultron*, *X-Men* e *Vingadores: Doomsday*.
 
@@ -47,7 +47,9 @@ Os cards usam artes padrão geradas pelo próprio jogo (sem fotos externas). Cad
 
 ```
 7a0-arena-do-multiverso/
-├── index.html                  # O jogo completo (HTML + CSS + JS num único arquivo)
+├── index.html                  # O jogo (HTML + CSS + motor do jogo)
+├── assets/js/pixel-art.js      # Artes dos cards em pixel art
+├── assets/js/narrador.js       # Textos dos logs de pré-duelo e dos atos
 ├── firebase-config.js          # Configuração do Firebase (salas online)
 ├── firebase-config.example.js  # Modelo para usar outro projeto Firebase
 ├── firestore.rules             # Regras de segurança do banco

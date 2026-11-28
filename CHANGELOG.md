@@ -2,6 +2,15 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.3.0] - 2026-11-27
+
+### Adicionado
+- Artes dos cards em pixel art: símbolo genérico por personagem, moldura hexagonal, brilho e grade nas cores do card (`assets/js/pixel-art.js`).
+- Narrador dos logs (`assets/js/narrador.js`): pré-duelo com vantagens por atributo, ponto-chave, destaques, encaixe e alerta de 7 a 0; atos com textos que variam conforme a margem (apertado, sólido, domínio).
+
+### Segurança
+- Nomes de jogadores escapados nos novos logs (evita injeção de HTML vinda das salas online).
+
 ## [1.2.0] - 2026-11-27
 
 ### Adicionado

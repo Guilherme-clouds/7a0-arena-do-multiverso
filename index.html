@@ -373,6 +373,8 @@
   <!-- MAIN APPLICATION MODULE (FIREBASE + GAME ENGINE) -->
   <!-- Configuração online opcional (Firebase). Copie firebase-config.example.js para firebase-config.js e preencha. -->
   <script src="firebase-config.js" onerror="void 0"></script>
+  <script src="assets/js/pixel-art.js"></script>
+  <script src="assets/js/narrador.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -941,6 +943,7 @@
     // 6. CARD & SQUARE AVATAR RENDERING HELPERS
     // =========================================================================
     function renderFallbackSvg(char) {
+      if (window.ArenaArt) return window.ArenaArt.renderCardSvg(char);
       const c1 = (char.colors && char.colors[0]) || '#1e293b';
       const c2 = (char.colors && char.colors[1]) || '#38bdf8';
       return `
@@ -1677,6 +1680,7 @@
     // =========================================================================
     // 9. PRE-BATTLE SCREEN (WIN % BAR, FAVORITISM LOG & READY BUTTONS)
     // =========================================================================
+    const toLogRows = sq => ((sq && sq.slots) || []).filter(sl => sl.charId && CHAR_MAP[sl.charId]).map(sl => { const ch = CHAR_MAP[sl.charId]; const e = computeSlotEffectiveStats(ch, sl.role); return { name: ch.name, feat: ch.feat, ofe: e.ofe, est: e.est, sup: e.sup, ovr: e.ovr, mult: e.mult }; });
     function analyzeMatchup(s1, s2) {
       const t1 = getSquadTotals(s1);
       const t2 = getSquadTotals(s2);
@@ -1713,6 +1717,11 @@
         verdictLog = `${s2.ownerName} assume o favoritismo com Overall ${t2.ovr} contra ${t1.ovr} de ${s1.ownerName}${strongAreas.length ? `, dominando em ${strongAreas.join(' e ')}` : ''}.`;
       }
 
+      if (window.ArenaNarrador) {
+        const nar = window.ArenaNarrador.preDuel({ s1, s2, t1, t2, prob1, prob2, rows1: toLogRows(s1), rows2: toLogRows(s2) });
+        verdictTitle = nar.title;
+        verdictLog = nar.html;
+      }
       return { t1, t2, prob1, prob2, verdictTitle, verdictLog };
     }
 
@@ -1792,7 +1801,7 @@
             <!-- Analytical Log Box -->
             <div class="rounded-2xl bg-slate-950/90 border border-slate-800 p-4 space-y-1.5">
               <div class="font-display text-sm sm:text-base font-bold text-white">${verdictTitle}</div>
-              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">${verdictLog}</p>
+              <div class="text-xs sm:text-sm text-slate-300 leading-relaxed">${verdictLog}</div>
             </div>
 
             <!-- Ready Buttons for Both Sides -->
@@ -1938,6 +1947,11 @@
 
         return { ...a, winner, narrative, mvp1, mvp2 };
       });
+
+      if (window.ArenaNarrador) {
+        const r1 = toLogRows(s1), r2 = toLogRows(s2);
+        acts.forEach(a => { a.narrative = window.ArenaNarrador.act({ act: a, s1, s2, rows1: r1, rows2: r2 }) || a.narrative; });
+      }
 
       if (score1 === score2) {
         const tie1 = t1.ovr + t1.est;
