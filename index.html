@@ -1949,8 +1949,8 @@
       });
 
       if (window.ArenaNarrador) {
-        const r1 = toLogRows(s1), r2 = toLogRows(s2);
-        acts.forEach(a => { a.narrative = window.ArenaNarrador.act({ act: a, s1, s2, rows1: r1, rows2: r2 }) || a.narrative; });
+        const r1 = toLogRows(s1), r2 = toLogRows(s2), usedFeats = new Set();
+        acts.forEach(a => { a.narrative = window.ArenaNarrador.act({ act: a, s1, s2, rows1: r1, rows2: r2, usedFeats }) || a.narrative; });
       }
 
       if (score1 === score2) {

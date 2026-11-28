@@ -77,7 +77,7 @@
     const sprite = spriteRects(rows, x0, y0, px, { a: c2, b: '#f8fafc', c: '#94a3b8' });
     const role = ROLE_ICON[char.primary] || '◆';
     return `
-      <svg viewBox="0 0 200 260" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <svg viewBox="0 0 200 260" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMin slice">
         <defs>
           <linearGradient id="${id}-bg" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="${c1}"/><stop offset="70%" stop-color="#0b0f1a"/><stop offset="100%" stop-color="#05070d"/>
