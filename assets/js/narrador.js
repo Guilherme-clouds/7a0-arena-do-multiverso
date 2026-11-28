@@ -46,7 +46,7 @@
     if (lead2.length) lines.push(`${b(n2)} leva vantagem em ${areaTxt(lead2, t2, t1) || 'Overall'}.`);
 
     const tight = keys.slice(0, 3).map(k => ({ k, d: Math.abs(t1[k] - t2[k]) })).sort((x, y) => x.d - y.d)[0];
-    if (tight) lines.push(`🎯 Ponto-chave: ${ATO[tight.k]} (${AREA[tight.k]}) — diferença de só ${tight.d} ponto${tight.d === 1 ? '' : 's'}.`);
+    if (tight) lines.push(`🎯 Ponto-chave: ${ATO[tight.k]} (${AREA[tight.k]}) — diferença de ${tight.d <= 15 ? 'só ' : ''}${tight.d} ponto${tight.d === 1 ? '' : 's'}.`);
 
     const st1 = best(rows1, 'ovr'), st2 = best(rows2, 'ovr');
     if (st1 && st2) lines.push(`⭐ Destaques: ${b(esc(st1.name))} (${st1.ovr}) por ${n1} e ${b(esc(st2.name))} (${st2.ovr}) por ${n2}.`);
@@ -87,7 +87,7 @@
     tie: ['Empate perfeito: {mvp1} e {mvp2} se anularam. Pontos divididos.', 'Ninguém cedeu! {mvp1} e {mvp2} terminaram o ato lado a lado.']
   };
 
-  function act({ act: a, s1, s2, rows1, rows2 }) {
+  function act({ act: a, s1, s2, rows1, rows2, usedFeats }) {
     if (!TPL[a.key]) return null;
     const lv = level(a.v1, a.v2);
     const seed = `${a.key}|${s1.ownerName}|${s2.ownerName}|${a.v1}|${a.v2}`;
@@ -104,7 +104,10 @@
     const rows = w ? rows1 : rows2;
     const star = rows.find(r => r.name === mvpRaw);
     let txt = fill(pick(TPL[a.key][lv], seed), { mvp: b(mvp), mvpL, owner: b(owner), rival });
-    if (lv === 'rout' && star && star.feat) txt += ` <span class="text-slate-400 italic">“${esc(star.feat)}”</span>`;
+    if (lv === 'rout' && star && star.feat && !(usedFeats && usedFeats.has(mvpRaw))) {
+      if (usedFeats) usedFeats.add(mvpRaw);
+      txt += ` <span class="text-slate-400 italic">“${esc(star.feat)}”</span>`;
+    }
     return `${txt} ${score} → +${a.pts} pts para ${owner}.`;
   }
 
