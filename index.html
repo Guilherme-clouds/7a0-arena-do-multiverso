@@ -375,6 +375,7 @@
   <script src="firebase-config.js" onerror="void 0"></script>
   <script src="assets/js/pixel-art.js"></script>
   <script src="assets/js/narrador.js"></script>
+  <script src="assets/js/torneio.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -1582,6 +1583,7 @@
 
       return `
         <div class="space-y-6 animate-enter">
+          ${window.ArenaTorneio ? window.ArenaTorneio.timerBox() : ''}
           <!-- Draft Header Status -->
           <div class="rounded-3xl bg-surface border border-slate-800 p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 shadow-xl">
             <div>
@@ -2163,8 +2165,8 @@
         await setDoc(ref, {
           size: state.tournament.size,
           phase: state.tournament.phase,
-          participants: state.tournament.participants,
-          rounds: state.tournament.rounds,
+          participants: JSON.parse(JSON.stringify(state.tournament.participants || [])),
+          rounds: JSON.parse(JSON.stringify((state.tournament.rounds || []).map(ms => ({ matches: ms })))),
           champion: state.tournament.champion,
           updatedAt: Date.now()
         }, { merge: true });
@@ -2193,10 +2195,12 @@
         if (snap.exists()) {
           const data = snap.data();
           const prevPhase = state.tournament.phase;
+          const prevParts = state.tournament.participants;
           state.tournament.size = data.size || state.tournament.size;
           state.tournament.phase = data.phase || state.tournament.phase;
           state.tournament.participants = data.participants || state.tournament.participants;
-          state.tournament.rounds = data.rounds || state.tournament.rounds;
+          state.tournament.rounds = data.rounds ? data.rounds.map(r => (Array.isArray(r) ? r : (r.matches || []))) : state.tournament.rounds;
+          if (window.ArenaTorneio) window.ArenaTorneio.cleanRoom(state.tournament, prevParts);
           state.tournament.champion = data.champion || null;
 
           // If host started simultaneous drafts, automatically launch draft for this player's claimed slot!
@@ -2265,11 +2269,12 @@
               isOnlineHost: false,
               phase: data.phase || 'LOBBY',
               participants: data.participants || [],
-              rounds: data.rounds || [],
+              rounds: (data.rounds || []).map(r => (Array.isArray(r) ? r : (r.matches || []))),
               champion: data.champion || null,
               mySlotIndex: null,
               targetSlotIndex: null
             };
+            if (window.ArenaTorneio) window.ArenaTorneio.cleanRoom(state.tournament, null);
             state.screen = 'TOURNAMENT';
             subscribeToTournamentRoom(code);
             showToast(`Conectado à sala ${code}! Assuma uma vaga e escolha sua formação.`, 'success');
@@ -2332,7 +2337,7 @@
     function updateTournamentSlotName(slotIdx, newName) {
       const p = state.tournament.participants[slotIdx];
       if (!p || p.occupantType !== 'PLAYER') return;
-      p.name = newName.trim() || `Jogador #${slotIdx + 1}`;
+      p.name = (window.ArenaTorneio ? window.ArenaTorneio.cleanName(newName) : newName.trim()) || `Jogador #${slotIdx + 1}`;
       syncTournamentRoomToCloud();
     }
 
@@ -2438,6 +2443,10 @@
     }
 
     async function launchSimultaneousTournamentDrafts() {
+      if (window.ArenaTorneio) {
+        const st = window.ArenaTorneio.lobbyStatus(state.tournament);
+        if (!st.canStart) { showToast(st.reason, 'warning'); return; }
+      }
       const players = state.tournament.participants.filter(p => p.occupantType === 'PLAYER');
       if (players.length === 0) {
         showToast('Assuma pelo menos 1 vaga no lobby antes de iniciar!', 'warning');
@@ -2509,6 +2518,8 @@
       const res = simulateFullBattleActs(match.p1.squad, match.p2.squad);
       match.winner = res.winner === 1 ? match.p1 : match.p2;
       match.scoreText = `${res.score1} x ${res.score2}`;
+      match.startedAt = Date.now();
+      if (window.ArenaTorneio) window.ArenaTorneio.watch(match.id);
 
       const curRound = state.tournament.rounds[roundIdx];
       if (curRound.every(m => !!m.winner)) {
@@ -2539,7 +2550,8 @@
 
       if (t.phase === 'LOBBY') {
         const players = t.participants.filter(p => p.occupantType === 'PLAYER');
-        const allPlayersReady = players.length > 0 && players.every(p => p.ready);
+        const lobbyInfo = window.ArenaTorneio ? window.ArenaTorneio.lobbyStatus(t) : null;
+        const allPlayersReady = lobbyInfo ? lobbyInfo.canStart : (players.length > 0 && players.every(p => p.ready));
 
         return `
           <div class="space-y-6 animate-enter">
@@ -2551,6 +2563,7 @@
                 </div>
                 <h2 class="font-display text-xl sm:text-2xl font-black text-white mt-1">Lobby do Mata-Mata (${t.size} Times)</h2>
                 <p class="text-xs text-slate-400">Escolha sua formação e clique em <strong>Pronto</strong>. Quando todos estiverem prontos, os drafts começam simultaneamente!</p>
+                ${lobbyInfo ? lobbyInfo.html : ''}
               </div>
               <div class="flex flex-wrap gap-2">
                 <button onclick="openShareLinkModal('${shareUrl}', 'Código da Sala Mata-Mata', '${t.roomCode}')"
@@ -2686,6 +2699,7 @@
       }
 
       // BRACKET PHASE
+      if (window.ArenaTorneio) return window.ArenaTorneio.renderBracket();
       return `
         <div class="space-y-6 animate-enter">
           <div class="rounded-3xl bg-surface border border-slate-800 p-5 flex flex-wrap items-center justify-between gap-4">
@@ -2938,7 +2952,10 @@
       else if (state.screen === 'PRE_BATTLE') app.innerHTML = renderPreBattle();
       else if (state.screen === 'BATTLE') app.innerHTML = renderBattle();
       else if (state.screen === 'TOURNAMENT') app.innerHTML = renderTournament();
+      if (window.ArenaTorneio) window.ArenaTorneio.afterRender();
     }
+
+    if (window.ArenaTorneio) window.ArenaTorneio.init({ state, render, showToast, localSessionId, CHAR_MAP, ERAS, getSquadTotals, computeSlotEffectiveStats, getCardLockReason, dealDraftOptionsForEra, spinEraRoulette, assignSelectedCardToSlot, simulateFullBattleActs, analyzeMatchup, renderSquareSquadCard, launchDrafts: launchSimultaneousTournamentDrafts });
 
     Object.assign(window, {
       goHome,

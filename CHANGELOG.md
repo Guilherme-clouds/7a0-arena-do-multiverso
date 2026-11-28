@@ -2,6 +2,19 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.4.0] - 2026-11-27
+
+### Adicionado
+- Copa do Multiverso: o lobby só inicia os drafts quando não há vagas abertas e todos os jogadores marcaram Pronto; com tudo pronto, os drafts começam sozinhos em 3 s.
+- Timer de 20 s por escolha no draft do mata-mata (verde → amarelo → vermelho). Se o tempo acabar, o jogo sorteia a obra e escala o melhor card na melhor vaga.
+- Batalhas ao vivo no chaveamento: análise pré-duelo (3 s) e um ato a cada 2,5 s, com os mesmos logs do 1v1. Todos na sala veem o confronto automaticamente; dá para rever depois.
+- O vencedor e a próxima fase só aparecem quando a batalha termina de passar.
+
+### Corrigido
+- O chaveamento não sincronizava online (o Firestore não aceita listas dentro de listas): agora as rodadas são salvas como objetos.
+- Picks recém-feitos não são mais apagados por uma atualização atrasada da sala.
+- Nomes de jogadores sem caracteres especiais (proteção contra injeção de HTML).
+
 ## [1.3.1] - 2026-11-27
 
 ### Corrigido
