@@ -33,7 +33,7 @@ Para chamar amigos, use o botão **🔗 Convidar Amigos** no topo do jogo — el
 | Duelo Rápido contra a IA | Você contra um esquadrão montado pela IA |
 | Duelo Local (1v1) | Dois jogadores no mesmo dispositivo |
 | Desafiar Esquadrão de Amigo | Cole o código `MRV2-...` que um amigo gerou e enfrente o time dele |
-| Copa do Multiverso | Mata-mata de 4 ou 8 times com lobby, formação, pronto e drafts simultâneos |
+| Copa do Multiverso | Mata-mata de 4 ou 8 times: lobby (começa só com todos prontos), drafts simultâneos com **20 s por escolha** e batalhas **ao vivo** que todos na sala acompanham |
 
 **Regras de draft entre players:** um card já escolhido por outro player fica bloqueado para os demais, e um mesmo personagem não pode aparecer em duas versões no mesmo time (ex.: dois Homens de Ferro).
 
@@ -50,6 +50,7 @@ Os cards usam artes originais em **pixel art** geradas pelo próprio jogo (`asse
 ├── index.html                  # O jogo (HTML + CSS + motor do jogo)
 ├── assets/js/pixel-art.js      # Artes dos cards em pixel art
 ├── assets/js/narrador.js       # Textos dos logs de pré-duelo e dos atos
+├── assets/js/torneio.js        # Copa do Multiverso: lobby, timer de escolha e batalhas ao vivo
 ├── firebase-config.js          # Configuração do Firebase (salas online)
 ├── firebase-config.example.js  # Modelo para usar outro projeto Firebase
 ├── firestore.rules             # Regras de segurança do banco
